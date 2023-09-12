@@ -73,20 +73,20 @@ public class ExecuteCLP {
 		List<CompoundTerm> ArgSeq = null ;
 		try {
 			//File dir = new File("../Examples/"+ sDName + "CLP/" + sDName + ".ecl");
-			/*½sÄ¶°ò¥»¨ç¦¡©I¥s*/
-			File all = new File("Examples/All.ecl");
+			/*ç·¨è­¯åŸºæœ¬å‡½å¼å‘¼å«*/
+			File all = new File("../Examples/All.ecl");
 			this.compileCLP(all);
-			/*½sÄ¶­n°õ¦æªºsd2clp¸òocl2clp*/
-			File dir = new File("Examples/"+ sdName + "CLP");
+			/*ç·¨è­¯è¦åŸ·è¡Œçš„sd2clpè·Ÿocl2clp*/
+			File dir = new File("../Examples/"+ sdName + "CLP");
 			String[] filenames;
 			if (dir.isDirectory()) {
 				filenames = dir.list();
 				for (int i = 0; i < filenames.length; i++) {
-					File eclFile = new File("Examples/"+ sdName + "CLP" + "/" + filenames[i]);
+					File eclFile = new File("../Examples/"+ sdName + "CLP" + "/" + filenames[i]);
 					this.compileCLP(eclFile);
 				}
 			}
-				/*°õ¦æquery*/
+				/*åŸ·è¡Œquery*/
 				String target_predicate = String
 						.format(sdName.substring(0,1).toLowerCase()+sdName.substring(1)+"Preamble(%s, FuncSeq, ArgSeq), write_exdr(eclipse_to_java ,FuncSeq), write_exdr(eclipse_to_java ,ArgSeq).",
 								target);

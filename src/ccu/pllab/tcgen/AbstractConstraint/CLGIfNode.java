@@ -75,7 +75,7 @@ public class CLGIfNode  extends CLGConstraint{
 		this.then.negConstraint();
 		if(this.elseExp!=null)
 		this.elseExp.negConstraint();
-	}//«ØÄn
+	}//??
 	
 	@Override
 	public void preconditionAddPre()

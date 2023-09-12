@@ -99,7 +99,7 @@ public class CLGGraph {
 		return this.connectionNodes;
 	}
 	public void InsertCompoundStateCLG(int nodeId,CLGGraph clgGraph) {
-		//°µ¥~¼hCLG©M¤º¼hCLG°µ³s±µ¡A¦pªG¦³²V¦Xª¬ºA¡Aª½±µ§ïÅÜ¤º¼hªºªì©lª¬ºA/¥~¼hªºµ²§ôª¬ºAªº³s±µ¸`ÂI¡A´N¬O´¡¤J¹Ï
+		//åšå¤–å±¤CLGå’Œå…§å±¤CLGåšé€£æ¥ï¼Œå¦‚æœæœ‰æ··åˆç‹€æ…‹ï¼Œç›´æ¥æ”¹è®Šå…§å±¤çš„åˆå§‹ç‹€æ…‹/å¤–å±¤çš„çµæŸç‹€æ…‹çš„é€£æ¥ç¯€é»ï¼Œå°±æ˜¯æ’å…¥åœ–
 		int externalId=((CLGConnectionNode)(this.getEndPredecessor())).getConnectionId()+1;
 		while(this. getConnectionNode(externalId)!=null)
 		{//to find external connection node max id
@@ -112,17 +112,17 @@ public class CLGGraph {
 			clgGraph.getConnectionNode(connId).setConnectionId(externalId++);
 		}
 		int size;
-		for (size=0;size<this.connectionNodes.size();size++) {//§ä©Ò¦³¥~¼hCLGªº³s±µ¸`ÂI
-			if (((CLGConnectionNode)this.connectionNodes.get(size)).getConnectionId() == nodeId) {//§ä¨ì²V¦X¦¡ªº³s±µ¸`ÂIªºID
+		for (size=0;size<this.connectionNodes.size();size++) {//æ‰¾æ‰€æœ‰å¤–å±¤CLGçš„é€£æ¥ç¯€é»
+			if (((CLGConnectionNode)this.connectionNodes.get(size)).getConnectionId() == nodeId) {//æ‰¾åˆ°æ··åˆå¼çš„é€£æ¥ç¯€é»çš„ID
 				for(int i=0;i<this.connectionNodes.get(size).getPredecessor().size();i++)
-				{//³B²z¥~¼hCLG³s±µ¨ì¦¹²V¦Xª¬ºAªº«e­±¨º¨Ç¸`ÂI¡A¨Ï¥L­Ì³s±µ¨ì¤º¼hCLGªºªì©lª¬ºAªº³s±µ¸`ÂI
-					this.connectionNodes.get(size).getPredecessor().get(i).removeSuccessor(this.connectionNodes.get(size));//©Ò¦³³s±µ¨ì¦¹²V¦Xª¬ºAªº¸`ÂI³£¤£­n³s±µ¦¹²V¦Xª¬ºAªº³s±µ¸`ÂI
-					this.connectionNodes.get(size).getPredecessor().get(i).addSuccessor(clgGraph.getStartNode().getSuccessor().get(0));//ª½±µ³s¨ì¤º¼hCLGªºªì©l³s±µ¸`ÂI
-					clgGraph.getStartSuccessor().removePredecessor(clgGraph.getStartNode());//¤º¼hCLG²¾°£¶}©lµ²ÂI
-					clgGraph.getStartSuccessor().addPredecessor(this.connectionNodes.get(size).getPredecessor().get(i));//ªì©l³s±µ¸`ÂI³s¨ì¥~¼hCLG¤§«eªºª¬ºA
+				{//è™•ç†å¤–å±¤CLGé€£æ¥åˆ°æ­¤æ··åˆç‹€æ…‹çš„å‰é¢é‚£äº›ç¯€é»ï¼Œä½¿ä»–å€‘é€£æ¥åˆ°å…§å±¤CLGçš„åˆå§‹ç‹€æ…‹çš„é€£æ¥ç¯€é»
+					this.connectionNodes.get(size).getPredecessor().get(i).removeSuccessor(this.connectionNodes.get(size));//æ‰€æœ‰é€£æ¥åˆ°æ­¤æ··åˆç‹€æ…‹çš„ç¯€é»éƒ½ä¸è¦é€£æ¥æ­¤æ··åˆç‹€æ…‹çš„é€£æ¥ç¯€é»
+					this.connectionNodes.get(size).getPredecessor().get(i).addSuccessor(clgGraph.getStartNode().getSuccessor().get(0));//ç›´æ¥é€£åˆ°å…§å±¤CLGçš„åˆå§‹é€£æ¥ç¯€é»
+					clgGraph.getStartSuccessor().removePredecessor(clgGraph.getStartNode());//å…§å±¤CLGç§»é™¤é–‹å§‹çµé»
+					clgGraph.getStartSuccessor().addPredecessor(this.connectionNodes.get(size).getPredecessor().get(i));//åˆå§‹é€£æ¥ç¯€é»é€£åˆ°å¤–å±¤CLGä¹‹å‰çš„ç‹€æ…‹
 				}
 				for(int i=0;i<this.connectionNodes.get(size).getSuccessor().size();i++)
-				{//»P«eªÌ¦P²z¡A¥u¬O³B²z¤º¼hµ²§ô³s±µ¸`ÂI
+				{//èˆ‡å‰è€…åŒç†ï¼Œåªæ˜¯è™•ç†å…§å±¤çµæŸé€£æ¥ç¯€é»
 					this.connectionNodes.get(size).getSuccessor().get(i).removePredecessor(this.connectionNodes.get(size));
 					this.connectionNodes.get(size).getSuccessor().get(i).addPredecessor(clgGraph.getEndNode().getPredecessor().get(0));
 					clgGraph.getEndPredecessor().addSuccessor(this.connectionNodes.get(size).getSuccessor().get(i));
@@ -131,7 +131,7 @@ public class CLGGraph {
 				break;
 			}
 		}
-		this.connectionNodes.remove(size);//²¾°£²V¦Xª¬ºA
+		this.connectionNodes.remove(size);//ç§»é™¤æ··åˆç‹€æ…‹
 		maxId=((CLGConnectionNode)(clgGraph.getEndPredecessor())).getConnectionId();
 		for(int connId=((CLGConnectionNode)(clgGraph.getStartSuccessor())).getConnectionId();connId<=maxId;connId++)
 		{
@@ -139,7 +139,7 @@ public class CLGGraph {
 				this.connectionNodes.add(clgGraph.getConnectionNode(connId));
 		}
 		
-		this.constraintNodes.putAll(clgGraph.getConstraintCollection());//¦X¨Ö
+		this.constraintNodes.putAll(clgGraph.getConstraintCollection());//åˆä½µ
 		
 		
 		for(int num=0;num<this.connectionNodes.size();num++)

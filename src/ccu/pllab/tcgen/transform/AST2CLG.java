@@ -2,20 +2,16 @@ package ccu.pllab.tcgen.transform;
 
 
 import ccu.pllab.tcgen.AbstractSyntaxTree.*;
-import ccu.pllab.tcgen.DataWriter.DataWriter;
 import ccu.pllab.tcgen.clg.StartNode;
 import ccu.pllab.tcgen.clg2path.CriterionFactory;
 import ccu.pllab.tcgen.clg2path.CriterionFactory.Criterion;
 import ccu.pllab.tcgen.exe.main.Main;
-import tcgenplugin_2.handlers.BlackBoxHandler;
-import tcgenplugin_2.handlers.SampleHandler;
 import ccu.pllab.tcgen.AbstractCLG.*;
 import ccu.pllab.tcgen.AbstractConstraint.CLGConstraint;
 import ccu.pllab.tcgen.AbstractConstraint.CLGIfNode;
 import ccu.pllab.tcgen.AbstractConstraint.CLGLiteralNode;
 import ccu.pllab.tcgen.AbstractConstraint.CLGOperatorNode;
 import ccu.pllab.tcgen.AbstractConstraint.CLGVariableNode;
-import ccu.pllab.tcgen.DataWriter.DataWriter;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,10 +25,6 @@ public class AST2CLG {
 	private String criterion;
 	private String clgFolder;
 	
-	public AST2CLG() throws IOException {
-		
-	}
-	
 	// private String
 	public AST2CLG(AbstractSyntaxTreeNode ast, String criterion, String folderPath, boolean boundaryAnalysis) throws IOException {
 		this.criterion = criterion;
@@ -42,13 +34,13 @@ public class AST2CLG {
 		CLGCriterionTransformer clgTF = new CLGCriterionTransformer();
 
 		for (int clg_number = 0; clg_number < astNode.size(); clg_number++) {
-			if (astNode.get(clg_number) instanceof OperationContext) {// ¦pªG¬Omethod¡A¤À¶}pre©MpostªºCLG¨Ó°µ
+			if (astNode.get(clg_number) instanceof OperationContext) {// å¦‚æœæ˜¯methodï¼Œåˆ†é–‹preå’Œpostçš„CLGä¾†åš
 				for (int stereo = 0; stereo < ((OperationContext) astNode.get(clg_number)).getStereoType().size(); stereo++) {
-					CLGGraph clg = new CLGGraph(((OperationContext) astNode.get(clg_number)).getStereoType().get(stereo).getTreeNode().AST2CLG());// ª½±µ±qpre©Îpost¤º¤å¤U¤â
+					CLGGraph clg = new CLGGraph(((OperationContext) astNode.get(clg_number)).getStereoType().get(stereo).getTreeNode().AST2CLG());// ç›´æ¥å¾preæˆ–postå…§æ–‡ä¸‹æ‰‹
 					String classname = ((OperationContext) astNode.get(clg_number)).getClassName();
 					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
 					String returntype = ((OperationContext) astNode.get(clg_number)).getReturnType();
-					// *******³]©wCLGªº°_©lÂIªº­È
+					// *******è¨­å®šCLGçš„èµ·å§‹é»çš„å€¼
 					((CLGStartNode) (clg.getStartNode())).setClassName(classname);
 					((CLGStartNode) (clg.getStartNode())).setMethodName(methodname);
 					ArrayList<String> argument = new ArrayList<String>();
@@ -70,31 +62,31 @@ public class AST2CLG {
 					}
 
 					// ******
-					clg_list.add(clg);// ³B²z¦n¤@­Ópre©Îpost
+					clg_list.add(clg);// è™•ç†å¥½ä¸€å€‹preæˆ–post
 				}
 
-				if (((OperationContext) astNode.get(clg_number)).getStereoType().size() == 2) {// ¦pªGmethod¦³pre©Mpost°µµ²¦X¡A¥HCLGIf°µµ²¦X
+				if (((OperationContext) astNode.get(clg_number)).getStereoType().size() == 2) {// å¦‚æœmethodæœ‰preå’Œpoståšçµåˆï¼Œä»¥CLGIfåšçµåˆ
 					String[] clgindex;
 					CLGGraph conditionCLG = this.getCLGGraph().get(clg_list.size() - 2);
 					clgindex = conditionCLG.getConstraintCollection().keySet().toString().substring(1, conditionCLG.getConstraintCollection().keySet().toString().length() - 1).split(", ");
 					int a = Integer.parseInt(clgindex[0]);
 					CLGConstraint condition = conditionCLG.getConstraintNodeById(a).getConstraint();
-					condition.preconditionAddPre();// ¦]¬°OCL¦³¨Ç­n¬Opre¦ı¨S¼Ğµù
+					condition.preconditionAddPre();// å› ç‚ºOCLæœ‰äº›è¦æ˜¯preä½†æ²’æ¨™è¨»
 
 					CLGGraph thenCLG = this.getCLGGraph().get(clg_list.size() - 1);
 					clgindex = thenCLG.getConstraintCollection().keySet().toString().substring(1, thenCLG.getConstraintCollection().keySet().toString().length() - 1).split(", ");
 					a = Integer.parseInt(clgindex[0]);
 					CLGConstraint then = thenCLG.getConstraintNodeById(a).getConstraint();
 					then.postconditionAddPre();
-					// condition->then¬O­ì¥»¨S¦³³s±µªºª¬ªp¡Aelse¬O­nªí¹Fexception
+					// condition->thenæ˜¯åŸæœ¬æ²’æœ‰é€£æ¥çš„ç‹€æ³ï¼Œelseæ˜¯è¦è¡¨é”exception
 					CLGOperatorNode elseExp = new CLGOperatorNode("=");
 					elseExp.setType("boolean");
 					CLGVariableNode result = new CLGVariableNode("result", "boolean");
 					CLGLiteralNode liter = new CLGLiteralNode("\"Exception\"", "boolean");
 					elseExp.setLeftOperand(result);
 					elseExp.setRightOperand(liter);
-					CLGGraph clg = new CLGGraph(new CLGIfNode(condition, then, elseExp));// ¤ñ¸û¦n°µ¹Ïªº³s±µpre©Mpost
-					// *******°µdc©Îdcc©ÎmccªºÂà´«
+					CLGGraph clg = new CLGGraph(new CLGIfNode(condition, then, elseExp));// æ¯”è¼ƒå¥½åšåœ–çš„é€£æ¥preå’Œpost
+					// *******åšdcæˆ–dccæˆ–mccçš„è½‰æ›
 					if (this.criterion.equals("dcc") || this.criterion.equals("dccdup"))
 						clg = clgTF.CriterionTransformer(clg, "dcc");
 					else if (this.criterion.equals("mcc") || this.criterion.equals("mccdup"))
@@ -102,9 +94,9 @@ public class AST2CLG {
 					else
 						clg = clgTF.CriterionTransformer(clg, "dc");
 
-					this.genCLGGraph(clg, clg_number, ((OperationContext) astNode.get(clg_number)).getMethodName());// «Ø¹Ï
+					this.genCLGGraph(clg, clg_number, ((OperationContext) astNode.get(clg_number)).getMethodName());// å»ºåœ–
 
-					// ~¥H¤U¦Ü121³£¬O¬°¤F±i®¶ÂE¾ÇªøCLG³¡¤À°µ°ò¥»³]©w
+					// ~ä»¥ä¸‹è‡³121éƒ½æ˜¯ç‚ºäº†å¼µæŒ¯é´»å­¸é•·CLGéƒ¨åˆ†åšåŸºæœ¬è¨­å®š
 					String classname = ((OperationContext) astNode.get(clg_number)).getClassName();
 					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
 					String returntype = ((OperationContext) astNode.get(clg_number)).getReturnType();
@@ -126,10 +118,10 @@ public class AST2CLG {
 						((CLGStartNode) (clg.getStartNode())).setRetType(returntype);
 					}
 
-					clg_list.remove(clg_list.size() - 1);// §Rpost clg
-					clg_list.remove(clg_list.size() - 1);// §Rpre clg
-					clg_list.add(clg);// ¥[¤Jpre+post clg
-				} else {// ¥u¦³post¦Ó¤w
+					clg_list.remove(clg_list.size() - 1);// åˆªpost clg
+					clg_list.remove(clg_list.size() - 1);// åˆªpre clg
+					clg_list.add(clg);// åŠ å…¥pre+post clg
+				} else {// åªæœ‰postè€Œå·²
 					CLGGraph clg = this.getCLGGraph().get(clg_list.size() - 1);
 					String[] clgindex = clg.getConstraintCollection().keySet().toString().substring(1, clg.getConstraintCollection().keySet().toString().length() - 1).split(", ");
 					int a = Integer.parseInt(clgindex[0]);
@@ -141,7 +133,7 @@ public class AST2CLG {
 					clg_list.remove(clg_list.size() - 1);
 					clg_list.add(clg);
 				}
-			} else {// ³B²zinvªº³¡¤À
+			} else {// è™•ç†invçš„éƒ¨åˆ†
 				this.invCLG = new CLGGraph(((ClassifierContext) astNode.get(clg_number)).getInv().getTreeNode().AST2CLG());
 				String classname = ((ClassifierContext) astNode.get(clg_number)).getClassName();
 				((CLGStartNode) (this.invCLG.getStartNode())).setClassName(classname);
@@ -157,7 +149,7 @@ public class AST2CLG {
 		CLGCriterionTransformer clgTF = new CLGCriterionTransformer();
 
 		for (int clg_number = 0; clg_number < astNode.size(); clg_number++) {
-			if (astNode.get(clg_number) instanceof OperationContext) {// ¦pªG¬Omethod¡A¤À¶}pre©MpostªºCLG¨Ó°µ
+			if (astNode.get(clg_number) instanceof OperationContext) {// å¦‚æœæ˜¯methodï¼Œåˆ†é–‹preå’Œpostçš„CLGä¾†åš
 				int pre_number=((OperationContext) astNode.get(clg_number)).getPreNum();
 				int post_number=((OperationContext) astNode.get(clg_number)).getPostNum();
 				for (int stereo = 0; stereo < ((OperationContext) astNode.get(clg_number)).getStereoType().size(); stereo++) {
@@ -168,11 +160,11 @@ public class AST2CLG {
 						pre_number--;
 						continue;
 					}
-					CLGGraph clg = new CLGGraph(temp);// ª½±µ±qpre©Îpost¤º¤å¤U¤â
+					CLGGraph clg = new CLGGraph(temp);// ç›´æ¥å¾preæˆ–postå…§æ–‡ä¸‹æ‰‹
 					String classname = ((OperationContext) astNode.get(clg_number)).getClassName();
 					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
 					String returntype = ((OperationContext) astNode.get(clg_number)).getReturnType();
-					// *******³]©wCLGªº°_©lÂIªº­È
+					// *******è¨­å®šCLGçš„èµ·å§‹é»çš„å€¼
 					((CLGStartNode) (clg.getStartNode())).setClassName(classname);
 					((CLGStartNode) (clg.getStartNode())).setMethodName(methodname);
 					ArrayList<String> argument = new ArrayList<String>();
@@ -193,7 +185,7 @@ public class AST2CLG {
 					}
 
 					// ******
-					clg_list.add(clg);// ³B²z¦n¤@­Ópre©Îpost
+					clg_list.add(clg);// è™•ç†å¥½ä¸€å€‹preæˆ–post
 				}
 					
 				if (pre_number==1&&post_number==1) {
@@ -202,36 +194,34 @@ public class AST2CLG {
 					clgindex = conditionCLG.getConstraintCollection().keySet().toString().substring(1, conditionCLG.getConstraintCollection().keySet().toString().length() - 1).split(", ");
 					int a = Integer.parseInt(clgindex[0]);
 					CLGConstraint condition = conditionCLG.getConstraintNodeById(a).getConstraint();
-					condition.preconditionAddPre();// ¦]¬°OCL¦³¨Ç­n¬Opre¦ı¨S¼Ğµù
+					condition.preconditionAddPre();// å› ç‚ºOCLæœ‰äº›è¦æ˜¯preä½†æ²’æ¨™è¨»
 
 					CLGGraph thenCLG = this.getCLGGraph().get(clg_list.size() - 1);
 					clgindex = thenCLG.getConstraintCollection().keySet().toString().substring(1, thenCLG.getConstraintCollection().keySet().toString().length() - 1).split(", ");
 					a = Integer.parseInt(clgindex[0]);
 					CLGConstraint then = thenCLG.getConstraintNodeById(a).getConstraint();
 					then.postconditionAddPre();
-					// condition->then¬O­ì¥»¨S¦³³s±µªºª¬ªp¡Aelse¬O­nªí¹Fexception
+					// condition->thenæ˜¯åŸæœ¬æ²’æœ‰é€£æ¥çš„ç‹€æ³ï¼Œelseæ˜¯è¦è¡¨é”exception
 					CLGOperatorNode elseExp = new CLGOperatorNode("=");
 					elseExp.setType("boolean");
 					CLGVariableNode result = new CLGVariableNode("exception", "boolean");
 					CLGLiteralNode liter = new CLGLiteralNode("\"Exception\"", "boolean");
 					elseExp.setLeftOperand(result);
 					elseExp.setRightOperand(liter);
-					CLGGraph clg = new CLGGraph(new CLGIfNode(condition, then, elseExp));// ¤ñ¸û¦n°µ¹Ïªº³s±µpre©Mpost
-					// *******°µdc©Îdcc©ÎmccªºÂà´«
+					CLGGraph clg = new CLGGraph(new CLGIfNode(condition, then, elseExp));// æ¯”è¼ƒå¥½åšåœ–çš„é€£æ¥preå’Œpost
+					// *******åšdcæˆ–dccæˆ–mccçš„è½‰æ›
 					if (Main.criterion.equals(CriterionFactory.Criterion.dcc) || Main.criterion.equals(CriterionFactory.Criterion.dccdup))
 						clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.dcc);
 					else if (Main.criterion.equals(CriterionFactory.Criterion.mcc) || Main.criterion.equals(CriterionFactory.Criterion.mccdup))
 						clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.mcc);
 					else
 						clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.dc);
-					
-					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					this.genCLGGraph(clg, methodname);// «Ø¹Ï
-//					this.genCLGGraph(clg, clg_number);
 
-					// ~¥H¤U¦Ü121³£¬O¬°¤F±i®¶ÂE¾ÇªøCLG³¡¤À°µ°ò¥»³]©w
+					this.genCLGGraph(clg, clg_number);// å»ºåœ–
+
+					// ~ä»¥ä¸‹è‡³121éƒ½æ˜¯ç‚ºäº†å¼µæŒ¯é´»å­¸é•·CLGéƒ¨åˆ†åšåŸºæœ¬è¨­å®š
 					String classname = ((OperationContext) astNode.get(clg_number)).getClassName();
-//					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
+					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
 					String returntype = ((OperationContext) astNode.get(clg_number)).getReturnType();
 					((CLGStartNode) (clg.getStartNode())).setClassName(classname);
 					((CLGStartNode) (clg.getStartNode())).setMethodName(methodname);
@@ -245,7 +235,7 @@ public class AST2CLG {
 					((CLGStartNode) (clg.getStartNode())).setMethodParameters(argument);
 					((CLGStartNode) (clg.getStartNode())).setMethodParameterTypes(argumenttype);
 					
-					//³]©wattributes
+					//è¨­å®šattributes
 					ArrayList<String> attribute = new ArrayList<String>();
 					ArrayList<VariableToken> attributes = Main.symbolTable.getAttribute();
 					for (int number = 0; number < attributes.size(); number++) {
@@ -260,12 +250,12 @@ public class AST2CLG {
 						((CLGStartNode) (clg.getStartNode())).setRetType(returntype);
 					}
 
-					clg_list.remove(clg_list.size() - 1);// §Rpost clg
-					clg_list.remove(clg_list.size() - 1);// §Rpre clg
-					clg_list.add(clg);// ¥[¤Jpre+post clg
+					clg_list.remove(clg_list.size() - 1);// åˆªpost clg
+					clg_list.remove(clg_list.size() - 1);// åˆªpre clg
+					clg_list.add(clg);// åŠ å…¥pre+post clg
 					
 					/*start  ocl2clp*/
-//					String methodCLP = ((CLGStartNode) clg.getStartNode()).OCL2CLP();
+					//String methodCLP = ((CLGStartNode) clg.getStartNode()).OCL2CLP();
 					//System.out.println(methodCLP);
 					/*end ocl2clp*/
 					
@@ -276,8 +266,8 @@ public class AST2CLG {
 					CLGGraph[] post=new CLGGraph[post_number];
 					for(int start=clg_list.size()-post_number-pre_number,i=0;i<pre_number+post_number;start++,i++)
 					{
-						CLGGraph clg = this.clg_list.get(start);// ¤ñ¸û¦n°µ¹Ïªº³s±µpre©Mpost
-						// *******°µdc©Îdcc©ÎmccªºÂà´«
+						CLGGraph clg = this.clg_list.get(start);// æ¯”è¼ƒå¥½åšåœ–çš„é€£æ¥preå’Œpost
+						// *******åšdcæˆ–dccæˆ–mccçš„è½‰æ›
 						if (Main.criterion.equals(CriterionFactory.Criterion.dcc) || Main.criterion.equals(CriterionFactory.Criterion.dccdup))
 							clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.dcc);
 						else if (Main.criterion.equals(CriterionFactory.Criterion.mcc) || Main.criterion.equals(CriterionFactory.Criterion.mccdup))
@@ -299,10 +289,7 @@ public class AST2CLG {
 						this.clg_list.remove(this.clg_list.size()-1);
 					//if(((CLGStartNode) post[post_number-1].getStartNode()).getClassName().equals("SortedArray"))
 					//	post[post_number-1].graphAnd(this.invCLG);
-					
-//					this.genCLGGraph(post[post_number-1], clg_number);
-					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					this.genCLGGraph(post[post_number-1], methodname);
+					this.genCLGGraph(post[post_number-1], clg_number);
 					ArrayList<CLGGraph> clg_list2=new ArrayList<CLGGraph>();
 					clg_list2.add(post[post_number-1]);
 				
@@ -311,7 +298,7 @@ public class AST2CLG {
 				}
 					
 					
-					else {// ¥u¦³post¦Ó¤w
+					else {// åªæœ‰postè€Œå·²
 					CLGGraph clg = this.getCLGGraph().get(clg_list.size() - 1);
 					String[] clgindex = clg.getConstraintCollection().keySet().toString().substring(1, clg.getConstraintCollection().keySet().toString().length() - 1).split(", ");
 					int a = Integer.parseInt(clgindex[0]);
@@ -319,14 +306,11 @@ public class AST2CLG {
 					post.postconditionAddPre();
 					clg = clgTF.CriterionTransformer(clg, Main.criterion);
 					clg.getStartNode().setVisitFalse();
-					
-//					this.genCLGGraph(clg, clg_number);
-					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					this.genCLGGraph(clg, methodname);
+					this.genCLGGraph(clg, clg_number);
 					clg_list.remove(clg_list.size() - 1);
 					clg_list.add(clg);
 					
-					//³]©wattributes
+					//è¨­å®šattributes
 					ArrayList<String> attribute = new ArrayList<String>();
 					ArrayList<VariableToken> attributes = Main.symbolTable.getAttribute();
 					for (int number = 0; number < attributes.size(); number++) {
@@ -335,11 +319,11 @@ public class AST2CLG {
 					((CLGStartNode) (clg.getStartNode())).setClassAttributes(attribute);
 					
 					/*start  ocl2clp*/
-					String methodCLP = ((CLGStartNode) clg.getStartNode()).OCL2CLP();
+					//String methodCLP = ((CLGStartNode) clg.getStartNode()).OCL2CLP();
 					//System.out.println(methodCLP);
 					/*end ocl2clp*/
 				}
-			} else {// ³B²zinvªº³¡¤À
+			} else {// è™•ç†invçš„éƒ¨åˆ†
 				this.invCLG = new CLGGraph(((ClassifierContext) astNode.get(clg_number)).getInv().getTreeNode().AST2CLG());
 				String classname = ((ClassifierContext) astNode.get(clg_number)).getClassName();
 				((CLGStartNode) (this.invCLG.getStartNode())).setClassName(classname);
@@ -350,206 +334,7 @@ public class AST2CLG {
 		}
 		Main.clg = this.clg_list;
 	}
-	
-	public void genCLG(AbstractSyntaxTreeNode ast) throws IOException {
-		ArrayList<AbstractSyntaxTreeNode> astNode = ((PackageExp) ast).getTreeNode();
-		CLGCriterionTransformer clgTF = new CLGCriterionTransformer();
-
-		for (int clg_number = 0; clg_number < astNode.size(); clg_number++) {
-			if (astNode.get(clg_number) instanceof OperationContext) {// ¦pªG¬Omethod¡A¤À¶}pre©MpostªºCLG¨Ó°µ
-				int pre_number=((OperationContext) astNode.get(clg_number)).getPreNum();
-				int post_number=((OperationContext) astNode.get(clg_number)).getPostNum();
-				for (int stereo = 0; stereo < ((OperationContext) astNode.get(clg_number)).getStereoType().size(); stereo++) {
-					CLGConstraint temp=((OperationContext) astNode.get(clg_number)).getStereoType().get(stereo).getTreeNode().AST2CLG();
-					if(temp==null)
-					{
-						Main.msort=true; 
-						pre_number--;
-						continue;
-					}
-					CLGGraph clg = new CLGGraph(temp);// ª½±µ±qpre©Îpost¤º¤å¤U¤â
-					String classname = ((OperationContext) astNode.get(clg_number)).getClassName();
-					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					String returntype = ((OperationContext) astNode.get(clg_number)).getReturnType();
-					// *******³]©wCLGªº°_©lÂIªº­È
-					((CLGStartNode) (clg.getStartNode())).setClassName(classname);
-					((CLGStartNode) (clg.getStartNode())).setMethodName(methodname);
-					ArrayList<String> argument = new ArrayList<String>();
-					ArrayList<String> argumenttype = new ArrayList<String>();
-					ArrayList<PropertyCallExp> parameters = ((OperationContext) astNode.get(clg_number)).getParameters();
-					for (int number = 0; number < parameters.size(); number++) {
-						argument.add(parameters.get(number).getVariable());
-						argumenttype.add(parameters.get(number).getType());
-					}
-					((CLGStartNode) (clg.getStartNode())).setMethodParameters(argument);
-					((CLGStartNode) (clg.getStartNode())).setMethodParameterTypes(argumenttype);
-					CLGStartNode startNode = (CLGStartNode) (clg.getStartNode());
-					if (returntype.equals(""))
-						((CLGStartNode) (clg.getStartNode())).setIsConstructor(true);
-					else 
-					{
-						((CLGStartNode) (clg.getStartNode())).setRetType(returntype);
-					}
-
-					// ******
-					clg_list.add(clg);// ³B²z¦n¤@­Ópre©Îpost
-				}
-					
-				if (pre_number==1&&post_number==1) {
-					String[] clgindex;
-					CLGGraph conditionCLG = this.getCLGGraph().get(clg_list.size() - 2);
-					clgindex = conditionCLG.getConstraintCollection().keySet().toString().substring(1, conditionCLG.getConstraintCollection().keySet().toString().length() - 1).split(", ");
-					int a = Integer.parseInt(clgindex[0]);
-					CLGConstraint condition = conditionCLG.getConstraintNodeById(a).getConstraint();
-					condition.preconditionAddPre();// ¦]¬°OCL¦³¨Ç­n¬Opre¦ı¨S¼Ğµù
-
-					CLGGraph thenCLG = this.getCLGGraph().get(clg_list.size() - 1);
-					clgindex = thenCLG.getConstraintCollection().keySet().toString().substring(1, thenCLG.getConstraintCollection().keySet().toString().length() - 1).split(", ");
-					a = Integer.parseInt(clgindex[0]);
-					CLGConstraint then = thenCLG.getConstraintNodeById(a).getConstraint();
-					then.postconditionAddPre();
-					// condition->then¬O­ì¥»¨S¦³³s±µªºª¬ªp¡Aelse¬O­nªí¹Fexception
-					CLGOperatorNode elseExp = new CLGOperatorNode("=");
-					elseExp.setType("boolean");
-					CLGVariableNode result = new CLGVariableNode("exception", "boolean");
-					CLGLiteralNode liter = new CLGLiteralNode("\"Exception\"", "boolean");
-					elseExp.setLeftOperand(result);
-					elseExp.setRightOperand(liter);
-					CLGGraph clg = new CLGGraph(new CLGIfNode(condition, then, elseExp));// ¤ñ¸û¦n°µ¹Ïªº³s±µpre©Mpost
-					// *******°µdc©Îdcc©ÎmccªºÂà´«
-					if (Main.criterion.equals(CriterionFactory.Criterion.dcc) || Main.criterion.equals(CriterionFactory.Criterion.dccdup))
-						clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.dcc);
-					else if (Main.criterion.equals(CriterionFactory.Criterion.mcc) || Main.criterion.equals(CriterionFactory.Criterion.mccdup))
-						clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.mcc);
-					else
-						clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.dc);
-					
-					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					this.genCLGGraph(clg, methodname);// «Ø¹Ï
-//					this.genCLGGraph(clg, clg_number);
-
-					// ~¥H¤U¦Ü121³£¬O¬°¤F±i®¶ÂE¾ÇªøCLG³¡¤À°µ°ò¥»³]©w
-					String classname = ((OperationContext) astNode.get(clg_number)).getClassName();
-//					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					String returntype = ((OperationContext) astNode.get(clg_number)).getReturnType();
-					((CLGStartNode) (clg.getStartNode())).setClassName(classname);
-					((CLGStartNode) (clg.getStartNode())).setMethodName(methodname);
-					ArrayList<String> argument = new ArrayList<String>();
-					ArrayList<String> argumenttype = new ArrayList<String>();
-					ArrayList<PropertyCallExp> parameters = ((OperationContext) astNode.get(clg_number)).getParameters();
-					for (int number = 0; number < parameters.size(); number++) {
-						argument.add(parameters.get(number).getVariable());
-						argumenttype.add(parameters.get(number).getType());
-					}
-					((CLGStartNode) (clg.getStartNode())).setMethodParameters(argument);
-					((CLGStartNode) (clg.getStartNode())).setMethodParameterTypes(argumenttype);
-					
-					//³]©wattributes
-					ArrayList<String> attribute = new ArrayList<String>();
-					ArrayList<VariableToken> attributes = Main.symbolTable.getAttribute();
-					for (int number = 0; number < attributes.size(); number++) {
-						attribute.add(attributes.get(number).getVariableName());
-					}
-					((CLGStartNode) (clg.getStartNode())).setClassAttributes(attribute);
-					
-					if (returntype.equals("")) {
-						((CLGStartNode) (clg.getStartNode())).setRetType("null");
-						((CLGStartNode) (clg.getStartNode())).setIsConstructor(true);
-					} else {
-						((CLGStartNode) (clg.getStartNode())).setRetType(returntype);
-					}
-
-					clg_list.remove(clg_list.size() - 1);// §Rpost clg
-					clg_list.remove(clg_list.size() - 1);// §Rpre clg
-					clg_list.add(clg);// ¥[¤Jpre+post clg
-					
-					/*start  ocl2clp*/
-//					String methodCLP = ((CLGStartNode) clg.getStartNode()).OCL2CLP();
-					//System.out.println(methodCLP);
-					/*end ocl2clp*/
-					
-				} else if(post_number>=2)
-				{
-					//System.out.println("clgsize:"+clg_list.size());
-				
-					CLGGraph[] post=new CLGGraph[post_number];
-					for(int start=clg_list.size()-post_number-pre_number,i=0;i<pre_number+post_number;start++,i++)
-					{
-						CLGGraph clg = this.clg_list.get(start);// ¤ñ¸û¦n°µ¹Ïªº³s±µpre©Mpost
-						// *******°µdc©Îdcc©ÎmccªºÂà´«
-						if (Main.criterion.equals(CriterionFactory.Criterion.dcc) || Main.criterion.equals(CriterionFactory.Criterion.dccdup))
-							clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.dcc);
-						else if (Main.criterion.equals(CriterionFactory.Criterion.mcc) || Main.criterion.equals(CriterionFactory.Criterion.mccdup))
-							clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.mcc);
-						else
-							clg = clgTF.CriterionTransformer(clg, CriterionFactory.Criterion.dc);
-
-						post[i]=clg;
-					}
-					for(int start=0;start<post_number-1;start++)
-					{
-						CLGGraph a=post[start];
-						CLGGraph b=post[start+1];
-						a.graphOr(b);
-						post[start+1]=a;
-					}
-					
-					for(int i=0;i<post_number;i++)
-						this.clg_list.remove(this.clg_list.size()-1);
-					//if(((CLGStartNode) post[post_number-1].getStartNode()).getClassName().equals("SortedArray"))
-					//	post[post_number-1].graphAnd(this.invCLG);
-					
-//					this.genCLGGraph(post[post_number-1], clg_number);
-					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					this.genCLGGraph(post[post_number-1], methodname);
-					ArrayList<CLGGraph> clg_list2=new ArrayList<CLGGraph>();
-					clg_list2.add(post[post_number-1]);
-				
-					this.clg_list.addAll(clg_list2);
-					
-				}
-					
-					
-					else {// ¥u¦³post¦Ó¤w
-					CLGGraph clg = this.getCLGGraph().get(clg_list.size() - 1);
-					String[] clgindex = clg.getConstraintCollection().keySet().toString().substring(1, clg.getConstraintCollection().keySet().toString().length() - 1).split(", ");
-					int a = Integer.parseInt(clgindex[0]);
-					CLGConstraint post = clg.getConstraintNodeById(a).getConstraint();
-					post.postconditionAddPre();
-					clg = clgTF.CriterionTransformer(clg, Main.criterion);
-					clg.getStartNode().setVisitFalse();
-					
-//					this.genCLGGraph(clg, clg_number);
-					String methodname = ((OperationContext) astNode.get(clg_number)).getMethodName();
-					this.genCLGGraph(clg, methodname);
-					clg_list.remove(clg_list.size() - 1);
-					clg_list.add(clg);
-					
-					//³]©wattributes
-					ArrayList<String> attribute = new ArrayList<String>();
-					ArrayList<VariableToken> attributes = Main.symbolTable.getAttribute();
-					for (int number = 0; number < attributes.size(); number++) {
-						attribute.add(attributes.get(number).getVariableName());
-					}
-					((CLGStartNode) (clg.getStartNode())).setClassAttributes(attribute);
-					
-					/*start  ocl2clp*/
-					String methodCLP = ((CLGStartNode) clg.getStartNode()).OCL2CLP();
-					//System.out.println(methodCLP);
-					/*end ocl2clp*/
-				}
-			} else {// ³B²zinvªº³¡¤À
-				this.invCLG = new CLGGraph(((ClassifierContext) astNode.get(clg_number)).getInv().getTreeNode().AST2CLG());
-				String classname = ((ClassifierContext) astNode.get(clg_number)).getClassName();
-				((CLGStartNode) (this.invCLG.getStartNode())).setClassName(classname);
-				((CLGStartNode) (this.invCLG.getStartNode())).setMethodName(classname);
-				((CLGStartNode) (this.invCLG.getStartNode())).setIsConstructor(false);
-				this.invCLG = clgTF.CriterionTransformer(this.invCLG, Main.criterion);
-			}
-		}
-		Main.clg = this.clg_list;
-	}
-	
+  
 	public ArrayList<CLGGraph> getCLGGraph() {
 		return this.clg_list;
 	}
@@ -559,44 +344,16 @@ public class AST2CLG {
 	}
 
 	public void genCLGGraph(CLGGraph clg, int number) throws IOException {
-		FileWriter dataFile;	
-		File clgFolder= new File(DataWriter.Clg_output_path);
-		if(!clgFolder.exists()) {
-			clgFolder.mkdirs();
-		}
-		File clgdot = new File(DataWriter.Clg_output_path+BlackBoxHandler.CurrentEditorName+"CLG"+number+".dot");
-//		DataWriter.writeInfo(clpContent, graphClassName + graphMethodName + "_" + pathNo, "ecl", DataWriter.output_folder_path, "ECL");
-//		³oÃä­É¥ÎDataWriterªºoutput¸ô®|
+ FileWriter dataFile;
 		
-		dataFile = new FileWriter(clgdot.getPath());
-//		dataFile = new FileWriter("${eclipse_home}../../examples/output/CLG"+number+".dot");
+		dataFile = new FileWriter("${project_loc}/../../examples/output/CLG/CLG"+number+".dot");
 		BufferedWriter input = new BufferedWriter(dataFile);
 		input.write(clg.graphDraw());
 		input.close();
-						
-		
-		new ProcessBuilder("dot", "-Tpng", DataWriter.Clg_output_path+BlackBoxHandler.CurrentEditorName+"CLG"+number+".dot",
-		"-o", DataWriter.Clg_output_path+BlackBoxHandler.CurrentEditorName+"CLG"+number+".png").start();
+				
+		new ProcessBuilder("dot", "-Tpng", "${project_loc}/../../examples/output/CLG/CLG"+number+".dot",
+		"-o", "${project_loc}/../../examples/output/CLG/CLG"+number+".png").start();
 	}
-	
-//	¥~±¾·s¼W
-	public void genCLGGraph(CLGGraph clg, String methodName) throws IOException {
-		FileWriter dataFile;	
-		File clgFolder= new File(DataWriter.Clg_output_path);
-		if(!clgFolder.exists()) {
-			clgFolder.mkdirs();
-		}
-		File clgdot = new File(clgFolder.getPath()+"/"+BlackBoxHandler.CurrentEditorName+methodName+".dot");
-		dataFile = new FileWriter(clgdot.getPath());
-		BufferedWriter input = new BufferedWriter(dataFile);
-		input.write(clg.graphDraw());
-		input.close();
-						
-		
-		new ProcessBuilder("dot", "-Tpng", DataWriter.Clg_output_path + BlackBoxHandler.CurrentEditorName+methodName+".dot",
-		"-o", DataWriter.Clg_output_path +BlackBoxHandler.CurrentEditorName+methodName+".png").start();
-	}
-	
 
 	public void genCLGGraph(CLGGraph clg, int number, String methodName) throws IOException {
 		FileWriter dataFile;

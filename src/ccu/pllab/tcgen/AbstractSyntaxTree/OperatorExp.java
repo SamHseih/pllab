@@ -211,12 +211,12 @@ public class OperatorExp extends AbstractSyntaxTreeNode{
 	
 	@Override
 	public void toGraphViz()
-	{//¤@­Ó»¼°j¨ç¦¡¡A¨ÓµeAST¹Ï
-		String astInformation=this.ASTInformation();//´î¤Ö¤@ª½©I¥s¨ç¦¡
+	{//ä¸€å€‹éè¿´å‡½å¼ï¼Œä¾†ç•«ASTåœ–
+		String astInformation=this.ASTInformation();//æ¸›å°‘ä¸€ç›´å‘¼å«å‡½å¼
 		if(this.leftOperand!=null)
 		{
 			System.out.println(astInformation+"->"+this.leftOperand.ASTInformation());
-			this.leftOperand.toGraphViz();//»¼°j
+			this.leftOperand.toGraphViz();//éè¿´
 		}
 		if(this.rightOperand!=null)
 		{

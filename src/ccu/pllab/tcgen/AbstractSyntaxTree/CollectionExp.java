@@ -120,13 +120,13 @@ public class CollectionExp extends AbstractSyntaxTreeNode{
 	}
 	
 	@Override
-	public void toGraphViz() //¦]¬°¨C­ÓÄ~©Óªºª«¥ó¦³¤£¦P¼gªk
+	public void toGraphViz() //å› ç‚ºæ¯å€‹ç¹¼æ‰¿çš„ç‰©ä»¶æœ‰ä¸åŒå¯«æ³•
 	{
-		String astInformation=this.ASTInformation();//´î¤Ö¤@ª½©I¥s¨ç¦¡
+		String astInformation=this.ASTInformation();//æ¸›å°‘ä¸€ç›´å‘¼å«å‡½å¼
 		if(this.start!=null)
 		{
 			System.out.println(astInformation+"->"+this.start.ASTInformation());
-			this.start.toGraphViz();//»¼°j
+			this.start.toGraphViz();//éè¿´
 		}
 		if(this.end!=null)
 		{

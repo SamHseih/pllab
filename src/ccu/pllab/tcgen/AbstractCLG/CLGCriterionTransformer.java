@@ -132,9 +132,9 @@ private boolean nodemon=false;
 					CLGOperatorNode x = (CLGOperatorNode) clg.getConstraintNodeById(a).getConstraint();
 
 					/********************
-					 * and operator ³B²z
+					 * and operator è™•ç†
 					 ******************************************/
-					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// and¬O·s¼Wªº
+					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// andæ˜¯æ–°å¢çš„
 					{
 
 						CLGConstraint Left = x.getLeftOperand();
@@ -143,7 +143,7 @@ private boolean nodemon=false;
 						CLGGraph R = parseConstraint(Right, criterion);
 						L.graphAnd(R);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						L.getEndNode().getPredecessor().get(0).removeSuccessor(L.getEndNode());
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
 						Predecessor = clg.getConstraintNodeById(a).getPredecessor().get(0);
@@ -157,8 +157,8 @@ private boolean nodemon=false;
 
 					}
 					/****************************************************************/
-					/******************** or operator ³B²z ******************************************/
-					else if (x.getOperator().equals("||") || x.getOperator().equals("or"))// and¬O·s¼Wªº
+					/******************** or operator è™•ç† ******************************************/
+					else if (x.getOperator().equals("||") || x.getOperator().equals("or"))// andæ˜¯æ–°å¢çš„
 					{
 
 						CLGConstraint left = x.getLeftOperand();
@@ -199,7 +199,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * xor operator ³B²z
+					 * xor operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("xor")) {
 
@@ -238,7 +238,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * implies operator ³B²z
+					 * implies operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("implies")) {
 
@@ -265,7 +265,7 @@ private boolean nodemon=false;
 
 						notA.graphOr(A);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
 						Predecessor = clg.getConstraintNodeById(a).getPredecessor().get(0);
@@ -378,9 +378,9 @@ private boolean nodemon=false;
 					CLGOperatorNode x = (CLGOperatorNode) clg.getConstraintNodeById(a).getConstraint();
 
 					/********************
-					 * and operator ³B²z
+					 * and operator è™•ç†
 					 ******************************************/
-					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// §ï!
+					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// æ”¹!
 					{
 
 						CLGConstraint Left = x.getLeftOperand();
@@ -389,7 +389,7 @@ private boolean nodemon=false;
 						CLGGraph R = parseConstraint(Right, criterion);
 						L.graphAnd(R);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						L.getEndNode().getPredecessor().get(0).removeSuccessor(L.getEndNode());
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
 						Predecessor = clg.getConstraintNodeById(a).getPredecessor().get(0);
@@ -402,7 +402,7 @@ private boolean nodemon=false;
 
 					}
 					/****************************************************************/
-					/******************** or operator ³B²z ******************************************/
+					/******************** or operator è™•ç† ******************************************/
 					else if (x.getOperator().equals("||") || x.getOperator().equals("or")) {
 						CLGConstraint left = x.getLeftOperand();
 
@@ -435,7 +435,7 @@ private boolean nodemon=false;
 
 						A.graphOr(mid);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
@@ -451,7 +451,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * xor operator ³B²z
+					 * xor operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("xor")) {
 						CLGConstraint left = x.getLeftOperand();
@@ -477,7 +477,7 @@ private boolean nodemon=false;
 
 						A.graphOr(B);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
@@ -490,7 +490,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * implies operator ³B²z
+					 * implies operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("implies")) {
 						CLGConstraint left = x.getLeftOperand();
@@ -516,7 +516,7 @@ private boolean nodemon=false;
 
 						notA.graphOr(A);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
@@ -708,7 +708,7 @@ private boolean nodemon=false;
 			}
 		}
 		/*****************************************
-		 * ­­¨î¸`ÂI»PÃä¼Æ¶q²Î­p***** System.out.println("constraint node " +
+		 * é™åˆ¶ç¯€é»èˆ‡é‚Šæ•¸é‡çµ±è¨ˆ***** System.out.println("constraint node " +
 		 * clg.getConstraintCollection().size()); System.out.println("edge
 		 * "+clg.getAllBranches().size() );
 		 ***********/
@@ -716,7 +716,7 @@ private boolean nodemon=false;
 		return clg;
 	}
 
-	public CLGGraph CriterionTransformer(CLGGraph clg, String criterion) {/// ¥é
+	public CLGGraph CriterionTransformer(CLGGraph clg, String criterion) {/// ä»¿
 		String[] clgindex = clg.getConstraintCollection().keySet().toString().substring(1, clg.getConstraintCollection().keySet().toString().length() - 1).split(", ");
 		if (criterion.equals("dcc") || criterion.equals("dccdup")) {
 			System.out.println("<=========dcc criterion=========>");
@@ -808,9 +808,9 @@ private boolean nodemon=false;
 					CLGOperatorNode x = (CLGOperatorNode) clg.getConstraintNodeById(a).getConstraint();
 
 					/********************
-					 * and operator ³B²z
+					 * and operator è™•ç†
 					 ******************************************/
-					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// and¬O·s¼Wªº
+					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// andæ˜¯æ–°å¢çš„
 					{
 
 						CLGConstraint Left = x.getLeftOperand();
@@ -819,7 +819,7 @@ private boolean nodemon=false;
 						CLGGraph R = parseConstraint(Right, criterion);
 						L.graphAnd(R);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						L.getEndNode().getPredecessor().get(0).removeSuccessor(L.getEndNode());
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
 						Predecessor = clg.getConstraintNodeById(a).getPredecessor().get(0);
@@ -833,8 +833,8 @@ private boolean nodemon=false;
 
 					}
 					/****************************************************************/
-					/******************** or operator ³B²z ******************************************/
-					else if (x.getOperator().equals("||") || x.getOperator().equals("or"))// and¬O·s¼Wªº
+					/******************** or operator è™•ç† ******************************************/
+					else if (x.getOperator().equals("||") || x.getOperator().equals("or"))// andæ˜¯æ–°å¢çš„
 					{
 
 						CLGConstraint left = x.getLeftOperand();
@@ -875,7 +875,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * xor operator ³B²z
+					 * xor operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("xor")) {
 
@@ -914,7 +914,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * implies operator ³B²z
+					 * implies operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("implies")) {
 
@@ -941,7 +941,7 @@ private boolean nodemon=false;
 
 						notA.graphOr(A);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
 						Predecessor = clg.getConstraintNodeById(a).getPredecessor().get(0);
@@ -1053,9 +1053,9 @@ private boolean nodemon=false;
 					CLGOperatorNode x = (CLGOperatorNode) clg.getConstraintNodeById(a).getConstraint();
 
 					/********************
-					 * and operator ³B²z
+					 * and operator è™•ç†
 					 ******************************************/
-					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// §ï!
+					if (x.getOperator().equals("&&") || x.getOperator().equals("and"))// æ”¹!
 					{
 
 						CLGConstraint Left = x.getLeftOperand();
@@ -1064,7 +1064,7 @@ private boolean nodemon=false;
 						CLGGraph R = parseConstraint(Right, criterion);
 						L.graphAnd(R);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						L.getEndNode().getPredecessor().get(0).removeSuccessor(L.getEndNode());
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
 						Predecessor = clg.getConstraintNodeById(a).getPredecessor().get(0);
@@ -1077,7 +1077,7 @@ private boolean nodemon=false;
 
 					}
 					/****************************************************************/
-					/******************** or operator ³B²z ******************************************/
+					/******************** or operator è™•ç† ******************************************/
 					else if (x.getOperator().equals("||") || x.getOperator().equals("or")) {
 						CLGConstraint left = x.getLeftOperand();
 
@@ -1110,7 +1110,7 @@ private boolean nodemon=false;
 
 						A.graphOr(mid);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
@@ -1126,7 +1126,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * xor operator ³B²z
+					 * xor operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("xor")) {
 						CLGConstraint left = x.getLeftOperand();
@@ -1152,7 +1152,7 @@ private boolean nodemon=false;
 
 						A.graphOr(B);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
@@ -1165,7 +1165,7 @@ private boolean nodemon=false;
 					}
 					/****************************************************************/
 					/********************
-					 * implies operator ³B²z
+					 * implies operator è™•ç†
 					 ******************************************/
 					else if (x.getOperator().equals("implies")) {
 						CLGConstraint left = x.getLeftOperand();
@@ -1191,7 +1191,7 @@ private boolean nodemon=false;
 
 						notA.graphOr(A);
 
-						// ³s±µ¹Ï¤ù
+						// é€£æ¥åœ–ç‰‡
 						A.getEndNode().getPredecessor().get(0).removeSuccessor(A.getEndNode());
 
 						successor = clg.getConstraintNodeById(a).getSuccessor().get(0);
@@ -1377,7 +1377,7 @@ private boolean nodemon=false;
 			}
 		}
 		/*****************************************
-		 * ­­¨î¸`ÂI»PÃä¼Æ¶q²Î­p***** System.out.println("constraint node " +
+		 * é™åˆ¶ç¯€é»èˆ‡é‚Šæ•¸é‡çµ±è¨ˆ***** System.out.println("constraint node " +
 		 * clg.getConstraintCollection().size()); System.out.println("edge
 		 * "+clg.getAllBranches().size() );
 		 ***********/
@@ -1397,7 +1397,7 @@ private boolean nodemon=false;
 			CLGConstraint search = ((CLGOperatorNode) node).getRightOperand();
 			CLGOperatorNode temp = (CLGOperatorNode) node;
 			int isIf = 0;
-			while (search != null)// §ï¹L
+			while (search != null)// æ”¹é
 			{
 				if (search instanceof CLGIfNode) {
 					isIf = 1;
@@ -1452,7 +1452,7 @@ private boolean nodemon=false;
 			CLGConstraint search = ((CLGOperatorNode) node).getRightOperand();
 			CLGOperatorNode temp = (CLGOperatorNode) node;
 			int isIterate = 0;
-			while (search != null)// §ï¹L
+			while (search != null)// æ”¹é
 			{
 				if (search instanceof CLGIterateNode) {
 					isIterate = 1;
@@ -1563,7 +1563,7 @@ private boolean nodemon=false;
 			if ((opconstraint.getOperator().equals("&&") || opconstraint.getOperator().equals("and") || opconstraint.getOperator().equals("||") || opconstraint.getOperator().equals("or"))
 					&& criterion.equals(CriterionFactory.Criterion.dc)) {
 
-				this.constraint = new ArrayList<CLGConstraint>();// §ó°Ê
+				this.constraint = new ArrayList<CLGConstraint>();// æ›´å‹•
 				ArrayList<CLGGraph> subclg = new ArrayList<CLGGraph>();
 				if (opconstraint.getLeftOperand() instanceof CLGIfNode) {
 					this.constraint.add(opconstraint.getLeftOperand());
@@ -1752,7 +1752,7 @@ private boolean nodemon=false;
 		return new CLGGraph(constraint);
 	}
 
-	private CLGGraph parseConstraint(CLGConstraint constraint, String criterion) {// ¥é
+	private CLGGraph parseConstraint(CLGConstraint constraint, String criterion) {// ä»¿
 
 		if (constraint instanceof CLGIfNode) {
 			CLGIfNode ifconstraint = (CLGIfNode) constraint;
@@ -1813,7 +1813,7 @@ private boolean nodemon=false;
 			if ((opconstraint.getOperator().equals("&&") || opconstraint.getOperator().equals("and") || opconstraint.getOperator().equals("||") || opconstraint.getOperator().equals("or"))
 					&& criterion.equals("dc")) {
 
-				this.constraint = new ArrayList<CLGConstraint>();// §ó°Ê
+				this.constraint = new ArrayList<CLGConstraint>();// æ›´å‹•
 				ArrayList<CLGGraph> subclg = new ArrayList<CLGGraph>();
 				if (opconstraint.getLeftOperand() instanceof CLGIfNode) {
 					this.constraint.add(opconstraint.getLeftOperand());

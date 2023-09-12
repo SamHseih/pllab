@@ -18,30 +18,33 @@ public class MainFrame{
 	private JFrame window;
 	private JButton clg;
 	private JButton ast;
+	private JButton test;
 	//private JButton exit;
-	private ActionListener clg_actionListener,ast_actionListener;//,exit_actionListener;
+	private ActionListener clg_actionListener,ast_actionListener, tst_actionListener;//,exit_actionListener;
 	private WindowAdapter windowAdapter;
 	  
 	public MainFrame()
 	{
 		this.window= new JFrame("Tcgen");
-		this.window.setBounds(500,500,300,200);
+		this.window.setBounds(500,500,300,300);
 		this.window.setVisible(true);
 		this.window.setLayout(null); 
 		this.setListener();
 		
-		
-		this.clg =new JButton("Start Tcgen");
-		this.clg.setBounds(90,50,100,40);
+		this.clg =new JButton("CLG2CLP");
+		this.clg.setBounds(90,30,100,40);
 		this.clg.addActionListener(this.clg_actionListener);
 		this.window.add(clg);
 		
+		this.ast = new JButton("OCL2CLP");
+		this.ast.setBounds(90,80,100,40);
+		this.ast.addActionListener(this.ast_actionListener);
+		this.window.add(ast);
 		
-//		this.ast = new JButton("OCL2CLP");
-//		this.ast.setBounds(90,80,100,40);
-//		this.ast.addActionListener(this.ast_actionListener);
-//		this.window.add(ast);
-		
+		this.test = new JButton("test");
+		this.test.setBounds(90,150,100,40);
+		this.test.addActionListener(this.tst_actionListener);
+		this.window.add(test);
 		/*this.exit = new JButton("End");
 		this.exit.setBounds(90,130,100,40);
 		this.exit.addActionListener(this.exit_actionListener);
@@ -65,11 +68,17 @@ public class MainFrame{
 					OCL2CLPFrame view=new OCL2CLPFrame();
 					window.dispose();
 				}};
+		
+				this.tst_actionListener=new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						StartView2 view=new StartView2();
+						window.dispose();
+					}};
 		/*this.exit_actionListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int result=JOptionPane.showConfirmDialog(window,
-		                "ΩT©w≠nµ≤ßÙµ{¶°∂‹?",
-		                "ΩTª{∞TÆß",
+		                "Á¢∫ÂÆöË¶ÅÁµêÊùüÁ®ãÂºèÂóé?",
+		                "Á¢∫Ë™çË®äÊÅØ",
 		                JOptionPane.YES_NO_OPTION,
 		                JOptionPane.WARNING_MESSAGE);
 						if (result==JOptionPane.YES_OPTION) {window.dispose();}
@@ -78,8 +87,8 @@ public class MainFrame{
       this.windowAdapter=new WindowAdapter() {
 	      public void windowClosing(WindowEvent e) {
 	        int result=JOptionPane.showConfirmDialog(window,
-	                   "Are you sure to end the program?",
-	                   "Exit",
+	                   "Á¢∫ÂÆöË¶ÅÁµêÊùüÁ®ãÂºèÂóé?",
+	                   "Á¢∫Ë™çË®äÊÅØ",
 	                   JOptionPane.YES_NO_OPTION,
 	                   JOptionPane.WARNING_MESSAGE);
 	        if (result==JOptionPane.YES_OPTION) {window.dispose();}

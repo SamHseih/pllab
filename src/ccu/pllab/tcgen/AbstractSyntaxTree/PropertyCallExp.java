@@ -115,7 +115,7 @@ public class PropertyCallExp extends AbstractSyntaxTreeNode{
 					this.type=method.get(this.variable);
 				}*/
 			}
-			else{//�p�G�O�ݩʪ�token�άO�Ѽƪ�token
+			else{//如果是屬性的token或是參數的token
 				ArrayList<VariableToken> attribute=symbolTable.getAttribute();
 				ArrayList<MethodToken> method=symbolTable.getMethod();
 				if(attribute!=null && attribute.contains(this.variable))

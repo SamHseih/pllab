@@ -4,38 +4,69 @@ package ccu.pllab.tcgen.AbstractCLG;
 import java.util.ArrayList;
 
 public class CLGConnectionNode extends CLGNode {
+	/**
+	 * 訪問過的點，以ArrayList型態存放
+	 */
 	private static ArrayList visted = new ArrayList();
+	/**
+	 * Stand for the counts of node.
+	 */
 	private static int connection_count=1;
+	/**
+	 * 紀錄此連結點的Id
+	 */
 	private int connectionId;
+	/**
+	 * 紀錄此連結點的名稱
+	 */
 	private String connectionName = "";
-
+	/**
+	 * 將此連結點的connectionId設定為connection_count<br>
+	 *之後 connection_count+1
+	 */
 	public CLGConnectionNode() {
 		super();
 		this.connectionId=connection_count++;
 	}
-
+	/**
+	 * 將此連結點的connectionId設定為參數值
+	 */
 	public CLGConnectionNode(int nodeId) {
 		super();
 		this.connectionId = nodeId;
 	}
-
-	public void setConnectionId(int id) {//���n�s�W
+	/**
+	 * 將connectionId設定為參數值
+	 * @param id 參數型態為int
+	 */
+	public void setConnectionId(int id) {//建瓏新增
 		 this.connectionId=id;
 	}
 	
-	
+	/**
+	 * getter of connectionId
+	 * @return 回傳型態為int
+	 */
 	public int getConnectionId() {
 		return this.connectionId;
 	}
-
+	/**
+	 * 將connectionName設定為參數值
+	 * @param name 參數型態為String
+	 */
 	public void setConnectionName(String name) {
 		this.connectionName = name;
 	}
-
+	/**
+	 * getter of connectionName
+	 * @return return type is String
+	 */
 	public String getConnectionName() {
 		return this.connectionName;
 	}
-
+	/**
+	 * 
+	 */
 	public String toGetImgInfo() {
 		String result = "";
 		if (connectionName.length() > 0) {
@@ -50,15 +81,24 @@ public class CLGConnectionNode extends CLGNode {
 		
 		return result;
 	}
+	/**
+	 * 將次連結點以字串型態表示並回傳
+	 * @return 回傳型態為String
+	 */
 	public String toString(){
 		return "<"+this.getConnectionId()+">";
 	}
 	@Override
+	/**
+	 * @inheritDoc
+	 */
 	public String toCLPInfo() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	/**
+	 * 
+	 */
 	@Override
 	public ArrayList genMethodCLP(String className, String methodName, ArrayList classAttributes, ArrayList methodParameters, ArrayList localParameters, String result) {
 		CLGNode nextNode ;
@@ -85,7 +125,7 @@ public class CLGConnectionNode extends CLGNode {
 			visted.add(this.getId());
 			for(int i=0; i < this.getSuccessor().size(); i++) {
 				nextNode = this.getSuccessor().get(i);
-				/*�U�@�Ӧp�G�O�s���I*/
+				/*下一個如果是連結點*/
 				if(nextNode.getClass().equals(this.getClass())) {
 					ArrayList connect = new ArrayList();
 					connect.add(this.connectionId + "_" + i);
@@ -94,7 +134,7 @@ public class CLGConnectionNode extends CLGNode {
 					clp.add(connect);
 					clp.addAll(nextNode.genMethodCLP(className, methodName, classAttributes, methodParameters, localParameters, result));
 				}
-				/*�U�@�Ӧp�G�O�����I*/
+				/*下一個如果是結束點*/
 				else if(nextNode.getClass().equals(CLGEndNode.class)) {
 					ArrayList end = new ArrayList();
 					end.add(this.connectionId + "_" + i);
@@ -109,12 +149,12 @@ public class CLGConnectionNode extends CLGNode {
 					a.add(className + methodName + "_node_" + this.getConnectionId()+"("+ attributes_pre +","+ arg_pre +","+ classAttributes +","+ methodParameters +", "+result+", Exception, "+local_pre+"):- \n");
 					clp.add(a);
 					clp.addAll(nextNode.genMethodCLP(className, methodName, classAttributes, methodParameters, localParameters, result));
-					/*�����Ű}�C*/
+					/*移除空陣列*/
 					for(int j=0; j < clp.size(); j++) {
 						if(clp.get(j).isEmpty())
 							clp.remove(j);
 					}
-					/*�]�w�ۦPclp�W��*/
+					/*設定相同clp名稱*/
 					for(int k=0; k < clp.size(); k++) {
 						if(clp.get(k).get(0).equals("0")) {
 							clp.get(k).set(0, this.connectionId + "_" + i);
@@ -129,44 +169,10 @@ public class CLGConnectionNode extends CLGNode {
 		return clp;
 	}
 	
-//	@Override
-//	public String genMethodCLP(String className, String methodName, ArrayList classAttributes, ArrayList methodParameters) {
-//		String CLP = "";
-//		CLGNode nextNode ;
-//		ArrayList attributes_pre = new ArrayList();
-//		ArrayList arg_pre = new ArrayList();
-//
-//
-//		for(int i = 0; i < classAttributes.size(); i++) {		
-//			attributes_pre.add(classAttributes.get(i)+"_0");
-//		}
-//		for(int j = 0; j < methodParameters.size(); j++) {		
-//			arg_pre.add(methodParameters.get(j)+"_0");
-//		}
-//		
-//		if (visted.contains(this.getId()) != true) {
-//			visted.add(this.getId());
-//			for(int i=0; i < this.getSuccessor().size(); i++) {
-//				nextNode = this.getSuccessor().get(i);
-//				/*�U�@�Ӧp�G�O�s���I�N�������j*/
-//				if(nextNode.getClass().equals(this.getClass())) {
-//					//nextNode = nextNode.getSuccessor().get(0);
-//					nextNode.genMethodCLP(className, methodName, classAttributes, methodParameters);
-//				}
-//				/*�U�@�Ӧp�G�O�����I�N�������j*/
-//				else if(nextNode.getClass().equals(CLGEndNode.class)) {
-//					nextNode.genMethodCLP(className, methodName, classAttributes, methodParameters);
-//				}
-//				else {
-//					CLP = CLP + className + "_" + methodName + "_node_" + this.getConnectionId()+"("+ attributes_pre +","+ arg_pre +","+ classAttributes +","+ methodParameters +", Result):- \n";
-//					CLP = CLP + nextNode.genMethodCLP(className, methodName, classAttributes, methodParameters);
-//
-//				}
-//			}
-//		}
-//		return CLP;
-//	}
-	
+
+	/**
+	 * 將connection_count屬性設定為1
+	 */
 	public static void reset(){
 		connection_count=1;
 	}

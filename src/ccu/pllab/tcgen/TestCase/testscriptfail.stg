@@ -1,6 +1,6 @@
 group testscript-group;
 
-testscript(testCasePackage, classPackage, classList, class_name, method_name,new_method_name, ret_type, ret_val, case_no, target_obj, arg_list, assert, sys_decl, sys_init, asc_init, sys_cleanup, is_ReturnClass, return_void, is_constructor,is_array,is_bound,obj_list,exception) ::= <<
+testscript(testCasePackage, classPackage, classList, class_name, method_name,new_method_name, ret_type, ret_val, case_no, target_obj, arg_list, assert, sys_decl, sys_init, asc_init, sys_cleanup, return_void, is_constructor,is_array,is_bound,obj_list,exception) ::= <<
 
 <classList:importClasses()>
 

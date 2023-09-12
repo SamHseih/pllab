@@ -269,7 +269,7 @@ public class CLGReachingDefinitionAnalyzer extends CLGGraph{
 	    for(int i=0;i<consnum.size();i++){ 
 			CLGConstraint clgcon = clg.getConstraintNodeById(consnum.get(i)).getConstraint();
 			 alldef415 = new ArrayList<String>();
-			//-- ¦¹constraint ¬O method, sereach hashtable(classname, methodname,
+			//-- æ­¤constraint æ˜¯ method, sereach hashtable(classname, methodname,
 			//	 CLG and define use).
 			if(clgcon instanceof CLGMethodInvocationNode){ 
 				CLGMethodInvocationNode clgmethod = (CLGMethodInvocationNode)clgcon;
@@ -285,7 +285,7 @@ public class CLGReachingDefinitionAnalyzer extends CLGGraph{
 					}
 				}
 			}//end if CLGMethodInvocationNode
-			//¦¹constraint ¬O guard can direct analysis.
+			//æ­¤constraint æ˜¯ guard can direct analysis.
 			else if(clgcon instanceof CLGOperatorNode){
 				CLGOperatorNode clgguard = (CLGOperatorNode)clgcon;
 				def = new ArrayList<String>();
@@ -441,7 +441,7 @@ public class CLGReachingDefinitionAnalyzer extends CLGGraph{
 		ArrayList<ArrayList<Integer>> prenode315 = new ArrayList<ArrayList<Integer>>();
 		ArrayList<ArrayList<Integer>> prenode418 = new ArrayList<ArrayList<Integer>>();
 		
-		for(int i=0;i<consnum.size();i++){ //³o­Óª¬ºA¹Ï¦³size­Óconstraintnode
+		for(int i=0;i<consnum.size();i++){ //é€™å€‹ç‹€æ…‹åœ–æœ‰sizeå€‹constraintnode
 			CLGNode clgnode = clg.getConstraintNodeById(consnum.get(i));
 			ArrayList<Integer> regprenode = new ArrayList<Integer>();
 			
@@ -449,7 +449,7 @@ public class CLGReachingDefinitionAnalyzer extends CLGGraph{
 			ArrayList<CLGNode> savepre = new ArrayList<CLGNode>();
 			
 					
-			for(int j=0;j<clgnode.getPredecessor().size();j++){ //¦¹constraintªºpre
+			for(int j=0;j<clgnode.getPredecessor().size();j++){ //æ­¤constraintçš„pre
 				//--418
 				savepre.add(clgnode.getPredecessor().get(j));
 				

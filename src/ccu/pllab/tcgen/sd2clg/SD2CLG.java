@@ -98,15 +98,15 @@ public class SD2CLG {
 //		//System.out.println("HI ~ "+clgstr);
 //		
 //		
-		File dir = new File("${eclipse_home}../../Examples/"+statedigram.getSDName()+"CLG"); 
-		if(dir.isDirectory())  { System.out.println("¦³¸ê®Æ§¨"); }
+		File dir = new File("${project_loc}/../../Examples/"+statedigram.getSDName()+"CLG"); 
+		if(dir.isDirectory())  { System.out.println("æœ‰è³‡æ–™å¤¾"); }
 		else { dir.mkdir(); System.out.println("no dir"); }   
-		FileWriter dataFile = new FileWriter("${eclipse_home}../../Examples/"+statedigram.getSDName()+"CLG/"+statedigram.getSDName()+"CLG.dot");
+		FileWriter dataFile = new FileWriter("${project_loc}/../../Examples/"+statedigram.getSDName()+"CLG/"+statedigram.getSDName()+"CLG.dot");
 		BufferedWriter input = new BufferedWriter(dataFile);
 		input.write(clgstr);
 		input.close();
-		new ProcessBuilder("dot", "-Tpng", "${eclipse_home}../../Examples/"+statedigram.getSDName()+"CLG/"+statedigram.getSDName()+"CLG.dot",
-				"-o", "${eclipse_home}../../Examples/"+statedigram.getSDName()+"CLG/"+statedigram.getSDName()+"CLG.png").start();
+		new ProcessBuilder("dot", "-Tpng", "${project_loc}/../../Examples/"+statedigram.getSDName()+"CLG/"+statedigram.getSDName()+"CLG.dot",
+				"-o", "${project_loc}/../../Examples/"+statedigram.getSDName()+"CLG/"+statedigram.getSDName()+"CLG.png").start();
 		
 		
 		//--

@@ -190,7 +190,7 @@ public class CLGOperatorNode extends CLGConstraint {
 		if (this.operator.equals("!=")) {
 			this.operator = "<>";
 		}
-		String info="";//改過
+		String info="";
 		if(leftOperand!=null)
 			info+=leftOperand.getImgInfo();
 		if(rightOperand!=null)
@@ -267,7 +267,7 @@ public class CLGOperatorNode extends CLGConstraint {
 			//		new_op = "=";
 				}
 			/*} else if (rightOperand instanceof CLGVariableNode) {
-				new_op = "=";//改+再改0527
+				new_op = "=";
 				this.operator="=";
 			} else {
 
@@ -278,7 +278,7 @@ public class CLGOperatorNode extends CLGConstraint {
 							new_op = "#=";
 							this.operator="#=";
 						}
-//我改
+//
 					} else {
 						new_op = "=";
 					}
@@ -742,7 +742,6 @@ public class CLGOperatorNode extends CLGConstraint {
 			}
 		}
 	}
-	
 	@Override
 	public  ArrayList<String> getInvCLPInfo()
 	{
@@ -789,7 +788,7 @@ public class CLGOperatorNode extends CLGConstraint {
 					new_op = "=";
 				}
 			} else if (rightOperand instanceof CLGVariableNode) {
-				new_op = "#=";//改
+				new_op = "#=";
 			} else {
 
 				if (rightOperand instanceof CLGOperatorNode) {
@@ -798,7 +797,7 @@ public class CLGOperatorNode extends CLGConstraint {
 						if (((CLGLiteralNode) tempCLGOperatorConstraint).getType() != "String") {
 							new_op = "#=";
 						}
-//我改
+
 					} else {
 						new_op = "=";
 					}
@@ -824,7 +823,7 @@ public class CLGOperatorNode extends CLGConstraint {
 		
 		if(this.leftOperand!=null)
 		((CLGOperatorNode) cons).setLeftOperand(this.leftOperand.clone());
-		if(this.rightOperand!=null)//我加
+		if(this.rightOperand!=null)
 		((CLGOperatorNode) cons).setRightOperand(this.rightOperand.clone());
 		((CLGOperatorNode) cons).setType(this.type);
 		cons.setCloneId(this.getConstraintId());

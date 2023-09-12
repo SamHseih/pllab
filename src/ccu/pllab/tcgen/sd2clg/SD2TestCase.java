@@ -55,8 +55,9 @@ public class SD2TestCase {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} //CLG-structure coffeemachine
-			
 			OCLCons=parseOCL(OCL, CD);
+			
+			
 		} catch (ParserConfigurationException | SAXException | IOException | TemplateException | ModelAccessException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,7 +84,6 @@ public class SD2TestCase {
 		testscri.genTestCase(resulttd,("ccu.pllab.tcgen.TCGenExample.example."+
 				st.getSDName()) , st.getSDName(), st.getSDAttribute());
 	}
-	
 	public static List<ccu.pllab.tcgen.ast.Constraint> parseOCL(File ocl, File uml) throws TemplateException, ModelAccessException, IOException, ParseException{
 		Model context;
 		IModel model;

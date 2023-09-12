@@ -26,7 +26,6 @@ import ccu.pllab.tcgen.clg2path.CriterionFactory.Criterion;
 import ccu.pllab.tcgen.facade.Facade;
 import ccu.pllab.tcgen.facade.FacadeConfig;
 import ccu.pllab.tcgen.sd2clg.SD2TestCase;
-import ccu.pllab.tcgen.srcASTVisitor.SrcVisitProcess;
 import tudresden.ocl20.pivot.model.ModelAccessException;
 import tudresden.ocl20.pivot.parser.ParseException;
 import tudresden.ocl20.pivot.tools.template.exception.TemplateException;
@@ -54,14 +53,14 @@ public class Main {
 	 * you need to set each type of program arguments
 	 * detail info is followed type argument
 	 * 
-	 *  <1> Black box testing
+	 *  [1] Black box testing
 	 * ocl_model_path
 	 * uml_model_path
 	 * config_file_path
 	 * uml_resource_path
 	 * log4j_property_path
 	 * output_folder_path
-	 * <Notice '-' signal>
+	 * [Notice '-' signal]
 	 * Example:
 	 * 
 	 * -ocl_model_path ${project_loc}/../Examples/grade/grade.ocl
@@ -78,7 +77,7 @@ public class Main {
 	 * -log4j_property_path C:\\Users\\chienLung\\tcgen\\tcgen-plugin\\log4j.properties
 	 * -output_folder_path C:\\Users\\chienLung\\tcgen\\examples\\output\\CLG
 	 * 
-	 *  <2> White box testing
+	 *  [2] White box testing
 	 * -ocl_model_path ${project_loc}/../Examples/grade/grade.ocl
 	 * -uml_model_path ${project_loc}/../Examples/grade/grade.uml
 	 * -config_file_path ${project_loc}/../Examples/grade/grade.config.json
@@ -86,7 +85,7 @@ public class Main {
 	 * -java_program_path ${project_loc}/../Examples/javaSrcCode/Grade/Grade.java
 	 * -output_folder_path ${project_loc}/../Examples/test-src
 	 * 
-	 * <3> Class diagram testing
+	 * [3] Class diagram testing
 	 * -ocl_model_path ${project_loc}/../Examples/Coffeemachine/coffeemachine.ocl
 	 * -uml_model_path ${project_loc}/../Examples/Coffeemachine/coffeemachine.uml
 	 * -state_diagram_path ${project_loc}/../Examples/Coffeemachine/CoffeeMachineSD.uml
@@ -134,8 +133,6 @@ public class Main {
 	public static boolean changeBoundary=false;
 	public static boolean doArray=false;
 	public static boolean boundaryhavesolution=false;
-	public static String TestType; //用來判斷測試類別
-	
 	public static void main(String[] args) throws IOException, TemplateException, ModelAccessException, ParseException,Exception {
 		msort=false;
 		MainFrame mainFrame=new MainFrame();

@@ -6,51 +6,98 @@ import java.util.ArrayList;
 import ccu.pllab.tcgen.AbstractConstraint.CLGConstraint;
 
 public class CLGConstraintNode extends CLGNode{
+	/**
+	 * 訪問過的點，以ArrayList型態存放
+	 */
 	private static ArrayList visted = new ArrayList();
-	private static int xlabel_count=0;
+	/**
+	 * xlabel_count紀錄創建了CLGConstraintNode時+1
+	 */
+	private static int xlabel_count=1;
+	/**
+	 * 此CLGConstraintNode的id
+	 */
 	private int xlabel_id;
+	/**
+	 * 限制式，型態為CLGConstraint
+	 */
 	private CLGConstraint constraint;
+	/**
+	 * 將constraint屬性設定為參數的限制式<br>
+	 * 將xlabel_id設定為xlabel_count, 之後xlabel_count+1
+	 * @param constraint 參數型態為CLGConstraint
+	 */
 	public CLGConstraintNode(CLGConstraint constraint){
 		super();
 		this.constraint=constraint;
 		this.xlabel_id=xlabel_count++;
 	}
+	/**
+	 * getter of constraint
+	 * @return 回傳型態為CLGConstraint
+	 */
 	public CLGConstraint getConstraint(){
 		return this.constraint;
 	}
 	
-
+	/**
+	 * 將xlabel_id設定為參數值
+	 * @param xlabelID 參數型態為int
+	 */
 	private void setXlabelID(int xlabelID) {
 		this.xlabel_id = xlabelID;
 	}
+	/**
+	 * 
+	 */
 	@Override
 	public String toGetImgInfo(){
 		String result ="";	
 		result += (this.getId() + " " + String.format("[shape=\"box\", label=\"%s\",style = \"filled\",fillcolor = \"yellow\",xlabel=\"[%d]\"]"+ "\n",this.constraint.getImgInfo(),this.xlabel_id));
 		return result;
 	}
+	/**
+	 * 
+	 */
 	@Override
 	public String toCLPInfo() {
 		String result="";
 		result += constraint.getCLPInfo();
 		return result;
 	}
+	/**
+	 * getter of xlabel_id
+	 * @return 回傳型態為int
+	 */
 	public int getXLabelId(){
 		return this.xlabel_id;
 	}
+	/**
+	 * 回傳此限制節點以字串形式表達的字串
+	 * @return 回傳型態為String
+	 */
 	public String toString(){
 		return "["+this.getXLabelId()+"]";
 	}
+	/**
+	 * 將xlabel_count值設定為1
+	 */
 	public static void reset(){
 		xlabel_count=1;
 	}
+	/**
+	 * 將此限制節點複製後返回此限制節點
+	 * @return 回傳型態為CLGNode
+	 */
 	@Override
 	public CLGNode clone() {
 		CLGConstraintNode node = new CLGConstraintNode(this.constraint.clone());
 		node.setXlabelID(this.xlabel_id);
 		return node;
 	}
-
+	/**
+	 * 
+	 */
 	@Override
 	public ArrayList genMethodCLP(String className, String methodName, ArrayList classAttributes, ArrayList methodParameters, ArrayList localParameters, String result) {
 		CLGNode nextNode = this.getSuccessor().get(0);
@@ -69,7 +116,7 @@ public class CLGConstraintNode extends CLGNode{
 			arg_pre.add(methodParameters.get(j)+"_pre");
 		}
 		
-		/*�P�_���Llocal*/
+		/*判斷有無local*/
 		for(int k = 0; k<this.getConstraint().getLocalVariable().split(",").length; k++) {
 			if(this.getConstraint().getLocalVariable().split(",")[k].equals("") != true) {
 				if(localParameters.contains(this.getConstraint().getLocalVariable().split(",")[k]) != true)
@@ -96,16 +143,16 @@ public class CLGConstraintNode extends CLGNode{
 			/*fix it to  It  bug*/
 			newClp = newClp.replaceAll("=it" , "=It");
 			
-			/*�U�@���٬OCLGConstraintNode�γr���j�}�A����and*/
+			/*下一個還是CLGConstraintNode用逗號隔開，表示and*/
 			if(nextNode.getClass().equals(this.getClass())) {
 				clp.get(0).add("	"+newClp + ", \n");
 			}
-			/*�P�_�O�_�n���ͤU�@���I�s*/
+			/*判斷是否要產生下一次呼叫*/
 			else if(nextNode.getClass().equals(CLGConnectionNode.class)) {
 				clp.get(0).add("	"+newClp + ", \n");
 				clp.get(0).add("	" + className  + methodName + "_node_" + ((CLGConnectionNode )nextNode).getConnectionId()+"("+ attributes_pre +","+ arg_pre +","+ classAttributes +","+ methodParameters +", "+ result +", Exception, "+ localParameters +"). \n");
 			}
-			/*�J��EndNode����predicate����*/
+			/*遇到EndNode表示predicate結束*/
 			else {
 				clp.get(0).add("	"+newClp + ", \n");
 				clp.get(0).add("	"+className + methodName + "_endNode("+ attributes_pre +","+ arg_pre +","+ classAttributes +","+ methodParameters +", "+ result +", Exception). \n");
@@ -132,16 +179,16 @@ public class CLGConstraintNode extends CLGNode{
 //		
 //		if (visted.contains(this.getId()) != true) {
 //			visted.add(this.getId());
-//			/*�U�@���٬OCLGConstraintNode�γr���j�}�A����and*/
+//			/*下一個還是CLGConstraintNode用逗號隔開，表示and*/
 //			if(nextNode.getClass().equals(this.getClass())) {
 //				CLP = CLP + "	"+this.toCLPInfo() + ", \n";
 //			}
-//			/*�P�_�O�_�n���ͤU�@���I�s*/
+//			/*判斷是否要產生下一次呼叫*/
 //			else if(nextNode.getClass().equals(CLGConnectionNode.class) && nextNode.getSuccessor().get(0).getClass().equals(CLGConstraintNode.class)) {
 //				CLP = CLP + "	"+this.toCLPInfo() + ", \n";
 //				CLP = CLP +"	" +className + "_" + methodName + "_node_" + ((CLGConnectionNode )nextNode).getConnectionId()+"("+ attributes_pre +","+ arg_pre +","+ classAttributes +","+ methodParameters +", Result). \n";
 //			}
-//			/*�J��EndNode����predicate����*/
+//			/*遇到EndNode表示predicate結束*/
 //			else {
 //				CLP = CLP + "	"+this.toCLPInfo() + ". \n";
 //			}

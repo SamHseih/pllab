@@ -14,7 +14,7 @@ public class LiteralExp extends AbstractSyntaxTreeNode{
 	private String value;
 	
 	public LiteralExp(String declareType,String declareValue) 
-	{//¦r¦ê¼Æ¦r
+	{//å­—ä¸²æ•¸å­—
 		super();
 		this.type=declareType;
 		this.value=declareValue;

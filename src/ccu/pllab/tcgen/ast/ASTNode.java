@@ -31,7 +31,7 @@ public abstract class ASTNode extends AnnotatedNode implements Predicate {
 	}
 
 	@Override
-	public boolean equals(Object obj) {//µ¥©ó
+	public boolean equals(Object obj) {//ç­‰æ–¼
 		if (this == obj)
 			return true;
 		if (obj == null)

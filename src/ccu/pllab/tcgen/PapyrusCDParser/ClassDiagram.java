@@ -31,7 +31,7 @@ public class ClassDiagram {
 		return testClassList ;
 	}
 	
-	// ¿é¤JClassªº¦W¦r, ¥u¦^¶Ç¦W¦r²Å¦XªºClassªº¸ê°T
+	// è¼¸å…¥Classçš„åå­—, åªå›å‚³åå­—ç¬¦åˆçš„Classçš„è³‡è¨Š
 	public ClassInfo findClass( String name ) {
 		if( testClassList == null ) {
 			return null ;
@@ -48,7 +48,7 @@ public class ClassDiagram {
 	} // findClass()
 	
 	
-	// ¿é¤JClassªº¦W¦r, ¥u¦^¶Ç¦W¦r²Å¦Xªºreference Classªº¸ê°T
+	// è¼¸å…¥Classçš„åå­—, åªå›å‚³åå­—ç¬¦åˆçš„reference Classçš„è³‡è¨Š
 	public ClassInfo findRefClass( String name ) {
 		if( refClassList == null ) {
 			return null ;

@@ -20,11 +20,10 @@ import ccu.pllab.tcgen.pathCLP2data.CLP2Data;
 import ccu.pllab.tcgen.pathCLP2data.CLP2DataFactory;
 import ccu.pllab.tcgen.pathCLP2data.ECLiPSe_CompoundTerm;
 import scala.collection.generic.BitOperations.Int;
-import tcgenplugin_2.handlers.SampleHandler;
 
 public class CLPSolver {
 	private CLP2Data clp2data;
-	private String EclDirectPath = DataWriter.output_folder_path+"/ecl/";
+	private String EclDirectPath = DataWriter.output_folder_path + "\\ECL\\";
 
 	private List<ECLiPSe_CompoundTerm> sol;
 	private TestData testData;
@@ -33,48 +32,12 @@ public class CLPSolver {
 
 	}
 	
-//	for路徑縮減
-	public boolean solvingInfeasiblePath(String className, String methodName, int pathNum,int testcaseID, boolean isConstructor, String retType, String objPre, String argPre, String objPost, String argPost,
-			String retVal) {
-		
-		this.EclDirectPath = "Examples/eclSIP/";
-		File eclFile = new File(EclDirectPath + className + methodName + "SIP" + pathNum + ".ecl");
-		int testCaseID = 1;
-		try {
-//			
-			this.connectCLPSolver();
-			this.clp2data.compile(eclFile);
-			this.sol = this.clp2data.solvingCSP_term("test" + className + methodName, objPre, argPre, objPost, argPost, retVal, 5);
-			this.testData = new TestData(className, methodName, pathNum, testCaseID, isConstructor, retType, this.sol);
-			System.out.println("TD: " + testData.toString());
-			return true;
-		} catch (Exception e) {
-			eclFile.renameTo(new File(eclFile.getParentFile(), eclFile.getName()));
-			//e.printStackTrace();
-			return false;
-		}
-	}
-	
 	public boolean solving(String className, String methodName, int pathNum,int testcaseID, boolean isConstructor, String retType, String objPre, String argPre, String objPost, String argPost,
 			String retVal) {
 		//this.EclDirectPath = DataWriter.output_folder_path + "C:\\Users\\chienLung\\tcgen\\examples\\output";
 		//this.EclDirectPath = "C:\\Users\\chienLung\\tcgen\\examples\\output\\CLG\\ECL\\";
-//		this.EclDirectPath = Main.output_folder_path+"\\ECL\\";
-//		因應外掛修改
-		
-		String TestTypeSign = "";
-		
-//		判別測試種類為黑箱或白箱等
-		if(Main.TestType == "BlackBox") {
-			TestTypeSign = "B";
-		}else if(Main.TestType == "WhiteBox") {
-			TestTypeSign = "W";
-		}else {
-			TestTypeSign = "C";
-		}
-		
-		this.EclDirectPath = DataWriter.testCons_output_path;
-		File eclFile = new File(EclDirectPath + className + methodName + TestTypeSign + pathNum + ".ecl");
+		this.EclDirectPath = Main.output_folder_path+"\\ECL\\";
+		File eclFile = new File(EclDirectPath + className + methodName + "_" + pathNum + ".ecl");
 		int testCaseID = 1;
 		try {
 //			
@@ -85,7 +48,7 @@ public class CLPSolver {
 			System.out.println("TD: " + testData.toString());
 			return true;
 		} catch (Exception e) {
-			eclFile.renameTo(new File(eclFile.getParentFile(), eclFile.getName()));
+			eclFile.renameTo(new File(eclFile.getParentFile(), "fail_" + eclFile.getName()));
 			//e.printStackTrace();
 			return false;
 		}
@@ -93,22 +56,8 @@ public class CLPSolver {
   
 	public boolean solving(String className, String methodName, int pathNum, int testcaseID, boolean isConstructor, String retType, String objPre, String argPre, String objPost, String argPost,
 			String retVal,String output_path) {
-		
-		String TestTypeSign = "";
-		
-//		判別測試種類為黑箱或白箱等
-		if(Main.TestType == "BlackBox") {
-			TestTypeSign = "B";
-		}else if(Main.TestType == "WhiteBox") {
-			TestTypeSign = "W";
-		}else {
-			TestTypeSign = "C";
-		}
-		
-//		this.EclDirectPath = output_path+"\\ECL\\";
-//		因應外掛修改
-		this.EclDirectPath = DataWriter.testCons_output_path;
-		File eclFile = new File(EclDirectPath + className + methodName + TestTypeSign + pathNum + ".ecl");
+		this.EclDirectPath = output_path+"\\ECL\\";
+		File eclFile = new File(EclDirectPath + className + methodName + "_" + pathNum + ".ecl");
 		int testCaseID = 1;
 		try {
 //			
@@ -119,7 +68,7 @@ public class CLPSolver {
 			System.out.println("TD: " + testData.toString());
 			return true;
 		} catch (Exception e) {
-			eclFile.renameTo(new File(eclFile.getParentFile(), eclFile.getName()));
+			eclFile.renameTo(new File(eclFile.getParentFile(), "fail_" + eclFile.getName()));
 			//e.printStackTrace();
 			return false;
 		}
@@ -130,7 +79,7 @@ public class CLPSolver {
 		int testCaseID = 1;
 		try {	
 //			String pathecl ="src/ccu/pllab/tcgen/TCGenExample824/ECL/";
-			String pathecl =ccu.pllab.tcgen.DataWriter.DataWriter.testCons_output_path;
+			String pathecl =ccu.pllab.tcgen.DataWriter.DataWriter.output_folder_path+"/ECL/";
 			//this.EclDirectPath = ccu.pllab.tcgen.DataWriter.DataWriter.output_folder_path+"ECL/";
 			eclFile = new File(pathecl + classN+"_"+pathNum + ".ecl");
 			this.connectCLPSolver();	

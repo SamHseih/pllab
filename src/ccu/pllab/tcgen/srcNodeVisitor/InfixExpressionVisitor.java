@@ -24,7 +24,7 @@ public class InfixExpressionVisitor extends JAVA2CLG implements SrcNodeVisit {
 		
 		/********
 		 * 
-		 * ¬A¸¹­n­×¥¿
+		 * æ‹¬è™Ÿè¦ä¿®æ­£
 		 */
 		
 //		System.out.println("LCons: "+node.getLeftOperand().getClass().toString());
@@ -123,4 +123,4 @@ public class InfixExpressionVisitor extends JAVA2CLG implements SrcNodeVisit {
 		return this.clgGraph;
 	}
 }
-/* ¥[¤J4ºØ visitor */
+/* åŠ å…¥4ç¨® visitor */

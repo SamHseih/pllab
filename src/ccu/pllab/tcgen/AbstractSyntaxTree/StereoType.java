@@ -94,11 +94,11 @@ public class StereoType extends AbstractSyntaxTreeNode{
 	
 	@Override
 	public void toGraphViz()
-	{//¤@­Ó»¼°j¨ç¦¡¡A¨ÓµeAST¹Ï
+	{//ä¸€å€‹éè¿´å‡½å¼ï¼Œä¾†ç•«ASTåœ–
 		if(this.expression!=null)
 		{
 			System.out.println(this.ASTInformation()+"->"+this.expression.ASTInformation());
-			this.expression.toGraphViz();//»¼°j
+			this.expression.toGraphViz();//éè¿´
 		}
 	}
 	@Override

@@ -24,7 +24,7 @@ public class CLGLiteralNode extends CLGConstraint {
 			if (this.value.contains("\"") ) {
 				return this.value;
 			}
-			if (this.value.contains("\'") ) {//§Ú¥[ªº
+			if (this.value.contains("\'") ) {
 				return this.value.replaceAll("\'", "\"");
 			}
 			else {

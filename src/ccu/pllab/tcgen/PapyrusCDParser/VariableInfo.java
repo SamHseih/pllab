@@ -8,8 +8,8 @@ public class VariableInfo {
 	private String visibility ;
 	private String lowerValue ;
 	private String upperValue ;
-	private String className ;  // ©ÒÄÝÃþ§O
-	// private String size ;  // °}¦C¥Î
+	private String className ;  // æ‰€å±¬é¡žåˆ¥
+	// private String size ;  // é™£åˆ—ç”¨
 	 
 	// private String value ;
 	

@@ -14,7 +14,7 @@ public class PackageExp extends AbstractSyntaxTreeNode{
 	
 	public PackageExp(String packageName)
 	{
-		super();//©I¥sAbstractSyntaxTreeNode()
+		super();//å‘¼å«AbstractSyntaxTreeNode()
 		this.packageName=packageName;
 	}
 	
@@ -74,12 +74,12 @@ public class PackageExp extends AbstractSyntaxTreeNode{
 	
 	@Override
 	public final void toGraphViz() 
-	{//¤@­Ó»¼°j¨ç¦¡¡A¨ÓµeAST¹Ï
+	{//ä¸€å€‹éè¿´å‡½å¼ï¼Œä¾†ç•«ASTåœ–
 		String astInformation=this.ASTInformation();
 		for(AbstractSyntaxTreeNode oneChild:this.context)
 		{
 			System.out.println(astInformation+"->"+oneChild.ASTInformation());
-			oneChild.toGraphViz();//»¼°j
+			oneChild.toGraphViz();//éè¿´
 		}
 	}
 	@Override

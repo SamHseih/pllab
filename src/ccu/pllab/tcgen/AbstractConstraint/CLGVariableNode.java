@@ -59,7 +59,7 @@ public class CLGVariableNode extends CLGConstraint{
 		if (this.constraint == null) {
 			return this.getName();
 		} else {
-		//	return this.name + "[" + this.constraint.getImgInfo() + "]";//我改的
+		//	return this.name + "[" + this.constraint.getImgInfo() + "]";
 			return this.name + "." + this.constraint.getImgInfo() ;
 		}
 	}
@@ -203,7 +203,7 @@ public class CLGVariableNode extends CLGConstraint{
 		/*if(this.getName().contains("self."))
 		{
 			return  this.getName().replaceAll("self.", "");
-		}我自加*/
+		}*/
 		if(this.getName().contains("self") &&this.constraint!=null)
 		{
 			return  this.getName().replaceAll("self", "");

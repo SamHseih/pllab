@@ -44,6 +44,7 @@ public class BoundaryEnumerator {
 		Main.conNodeiterateBoundary=new HashMap<CLGConstraintNode,Integer> ();
 		for(int i=0;i< boundarypath.getPathNodes().size();i++)
 		{
+		 
 			CLGNode n = boundarypath.getPathNodes().get(i);;
 		
 			if(n instanceof CLGConstraintNode)
@@ -55,6 +56,9 @@ public class BoundaryEnumerator {
 		    	}
 			}
 		}
+		
+		
+		
 	}
 	
 	
@@ -69,8 +73,6 @@ public class BoundaryEnumerator {
 	private HashMap<CLGConstraint, CLGConstraintNode> con2ConNode;
 	private CLGConstraint boundaryConstraint;
 	//private HashSet<CLGOperatorNode> tempboundaryConstraints ;
-//	public 
-	
 	private void flattenBoundaryConstraint(CLGOperatorNode constraint,CLGConstraintNode node){
 
 		if(constraint.getOperator().equals(">=") || constraint.getOperator().equals("<="))
@@ -118,16 +120,16 @@ public class BoundaryEnumerator {
 	
 
 	
-//	邊界分析()
+	
 	public CLGPath next(){
 	
-		if(boundaryConstraints.isEmpty())
-		{
-			System.out.println("There is no more boundary path !!");
-			return null;
-		}
+	if(boundaryConstraints.isEmpty())
+	{
+		System.out.println("There is no more boundary path !!");
+		return null;
+	}
 	
-//		step1:將單一路徑中的每個限制式中(<=, >=)變換為(<, >)
+		
 		if(current_constraint == null)
 		{
 			//tempboundaryConstraints=boundaryConstraints;
@@ -157,65 +159,60 @@ public class BoundaryEnumerator {
 			op=null;
 		}
 		
-		if(current_constraint != null && op !=null)
-		{
-			if(!current_constraint.getBoundary())
-			{
-			current_constraint.setOperator(op);
-			boundaryConstraints.remove(current_constraint);
-			}
-			else
-			{
-				if(Main.iterateBoundary.get(current_constraint.getConstraintId())!=1)
-				{
-					Main.iterateBoundary.put(current_constraint.getConstraintId(),Main.iterateBoundary.get(current_constraint.getConstraintId())-1);
-					Main.conNodeiterateBoundary.put(con2ConNode.get(current_constraint),Main.iterateBoundary.get(current_constraint.getConstraintId()));
-					return boundarypath;
-				}
-				else
-					boundaryConstraints.remove(current_constraint);
-			}
-		}
+		    		if(current_constraint != null && op !=null)
+		    		{
+		    			if(!current_constraint.getBoundary())
+		    			{
+		    			current_constraint.setOperator(op);
+		    			boundaryConstraints.remove(current_constraint);
+		    			}
+		    			else
+		    			{
+		    				if(Main.iterateBoundary.get(current_constraint.getConstraintId())!=1)
+		    				{
+		    					Main.iterateBoundary.put(current_constraint.getConstraintId(),Main.iterateBoundary.get(current_constraint.getConstraintId())-1);
+		    					Main.conNodeiterateBoundary.put(con2ConNode.get(current_constraint),Main.iterateBoundary.get(current_constraint.getConstraintId()));
+		    					return boundarypath;
+		    				}
+		    				else
+		    					boundaryConstraints.remove(current_constraint);
+		    			}
+    				}
 		    	
-		for(CLGOperatorNode c : boundaryConstraints) 
-		{	
-			if(!c.getFromIterateExp())
-			{
-				switch(((CLGOperatorNode) c).getOperator())
-				{
-				case ">=":
-			
-					op=((CLGOperatorNode) c).getOperator();
-				
-					((CLGOperatorNode) c).setOperator("==");
-					current_constraint=(CLGOperatorNode) c;
-				
-					return boundarypath;
-				case "<=":
-					
-					op=((CLGOperatorNode) c).getOperator();
-					if(!Main.iterateBoundary.containsKey(c.getConstraintId()))
-					((CLGOperatorNode) c).setOperator("=="); 
-					else {
-						Main.conNodeiterateBoundary.put(con2ConNode.get(current_constraint),Main.iterateBoundary.get(current_constraint.getConstraintId()));
-					}
-					current_constraint=(CLGOperatorNode) c;
-					return boundarypath;
-				default:  				
-					current_constraint=(CLGOperatorNode) c;
-					
-					break;
-				}
-			}	
-		}    		
+		    		for(CLGOperatorNode c : boundaryConstraints) 
+		    		{	
+		    			if(!c.getFromIterateExp())
+		    			{
+		    				switch(((CLGOperatorNode) c).getOperator())
+		    				{
+		    				case ">=":
+		    			
+		    					op=((CLGOperatorNode) c).getOperator();
+		    				
+		    					((CLGOperatorNode) c).setOperator("==");
+		    					current_constraint=(CLGOperatorNode) c;
+		    				
+		    					return boundarypath;
+		    				case "<=":
+		    					
+		    					op=((CLGOperatorNode) c).getOperator();
+		    					if(!Main.iterateBoundary.containsKey(c.getConstraintId()))
+		    					((CLGOperatorNode) c).setOperator("=="); 
+		    					else {
+		    						Main.conNodeiterateBoundary.put(con2ConNode.get(current_constraint),Main.iterateBoundary.get(current_constraint.getConstraintId()));
+								}
+		    					current_constraint=(CLGOperatorNode) c;
+		    					return boundarypath;
+		    				default:  				
+		    					current_constraint=(CLGOperatorNode) c;
+		    					
+		    					break;
+		    				}
+		    			}
+		    				
+		    			}
 		
 		return null;
 	}
-	
-//	回傳邊界值分析的增加路徑數，值為n+1條
-//	for路徑縮減
-	public int getNumOfBoundaryConstraints() {
-		int num = this.boundaryConstraints.size();
-		return num + 1;
-	}
+
 }

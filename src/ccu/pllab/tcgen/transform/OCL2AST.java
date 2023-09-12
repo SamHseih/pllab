@@ -1,4 +1,4 @@
-//maker:¤ı«ØÄn
+//maker:ç‹å»ºç“
 package ccu.pllab.tcgen.transform;
 
 import java.io.FileInputStream;
@@ -20,16 +20,16 @@ import java.util.ArrayList;
 
 import java.io.File; 
 public class OCL2AST {
-	private PackageExp ast;//©â¶H»yªk¾ğ
+	private PackageExp ast;//æŠ½è±¡èªæ³•æ¨¹
 	private SymbolTable symbolTable;
 
-	public OCL2AST() throws Exception 
-	{	
-//		  Main.className="";
-//		  makeAST(ocl);
-//	      makeSymbolTable(classuml);
-//	      Main.symbolTable=this.symbolTable;
-//	      typeToAst(); 
+	public OCL2AST(File ocl,File classuml) throws Exception 
+	{
+		  Main.className="";
+		 makeAST(ocl);
+	      makeSymbolTable(classuml);
+	      Main.symbolTable=this.symbolTable;
+	      typeToAst(); 
 	}	
 	
 	public AbstractSyntaxTreeNode getAbstractSyntaxTree()
@@ -43,26 +43,26 @@ public class OCL2AST {
 	}
 	  
 	public void makeAST(File ocl) throws IOException
-	{//OCLÂà´«¦¨©â¶H»yªk¾ğ
+	{//OCLè½‰æ›æˆæŠ½è±¡èªæ³•æ¨¹
 		InputStream is = System.in;
-	      if ( ocl!=null ) is = new FileInputStream(ocl);//´ú¸ÕªºOCLÀÉ
+	      if ( ocl!=null ) is = new FileInputStream(ocl);//æ¸¬è©¦çš„OCLæª”
 	      ANTLRInputStream input = new ANTLRInputStream(is);
 	      OclLexer lexer = new OclLexer(input);
 	      CommonTokenStream tokens = new CommonTokenStream(lexer);
 	      OclParser parser = new OclParser(tokens);
     
-	      this.ast= parser.packageDeclarationCS().astRoot;//¶]§¹½sÄ¶«á¡A·|¦^¶ÇASTµ²ºctree
+	      this.ast= parser.packageDeclarationCS().astRoot;//è·‘å®Œç·¨è­¯å¾Œï¼Œæœƒå›å‚³ASTçµæ§‹tree
 	      is.close();
 	}
 	
 	public void makeSymbolTable(File classuml)
 	{
-		//Ãş§O¹Ï¤ÀªR..¾¤©É§D°µªº
+		//é¡åˆ¥åœ–åˆ†æ..é»æ€¡ä¼¶åšçš„
 			SingleCDParser classParser = new SingleCDParser(classuml) ;
 			classParser.Parse();
 			classParser.changeTypeStr();
 			
-		//¶}©l°µsymbol table
+		//é–‹å§‹åšsymbol table
 			this.symbolTable=new SymbolTable(classParser.getPkgName());
 		    ClassInfo c = classParser.getClassList().get(0);
 		    Main.className=c.getName();
@@ -70,7 +70,7 @@ public class OCL2AST {
 		    for(int j= 0; c.getProperties()!= null && j < c.getProperties().size();j++ ) {
 		    	VariableInfo p = c.getProperties().get(j);
 		  
-		    	//....³B²zsort
+		    	//....è™•ç†sort
 		    	if(p.getType().equals("ArrayList"))
 		    	{
 		    		p.setType("int[x]");
@@ -127,13 +127,13 @@ public class OCL2AST {
 		    for(int k= 0; c.getOperations()!= null && k < c.getOperations().size();k++ ) {
 		    	OperationInfo o = c.getOperations().get(k);
 		    	MethodToken method=new MethodToken(o.getName());
-		    	//³B²zmethodªº¦^¶Ç­È
+		    	//è™•ç†methodçš„å›å‚³å€¼
 		    	if(o.getReturnType()==null)
 		    		method.setReturnType("OclVoid");
 		    	else
 		    		method.setReturnType(o.getReturnType().getType());
 		    	
-		    	//³B²z°Ñ¼Æ
+		    	//è™•ç†åƒæ•¸
 		    	for(int index = 0 ;o.getParameter()!= null && index < o.getParameter().size();index++) {
 			    	VariableInfo p = o.getParameter().get(index);
 			    	if(p.getType().equals("ArrayList"))
@@ -186,24 +186,22 @@ public class OCL2AST {
 		    }
 		    for(MethodToken methodToken:this.symbolTable.getMethod())
 		    	this.symbolTable.addArgument(methodToken.getArgument());
-		    
-		    Main.symbolTable=this.symbolTable;
 	}
 	
 	public void typeToAst()
 	{
-		 int ocl_start=0;//¥NªíoperationContext¬O±q²Ä´X­Ó¶}©l
-	      if(this.ast.getTreeNode().get(0) instanceof ClassifierContext)//¦]¬°¦³¨ÇOCLÀÉ®×¨S¦³inv
-	      {  //³]©wÄİ©Êªºtype
+		 int ocl_start=0;//ä»£è¡¨operationContextæ˜¯å¾ç¬¬å¹¾å€‹é–‹å§‹
+	      if(this.ast.getTreeNode().get(0) instanceof ClassifierContext)//å› ç‚ºæœ‰äº›OCLæª”æ¡ˆæ²’æœ‰inv
+	      {  //è¨­å®šå±¬æ€§çš„type
 	    	  ((ClassifierContext)(this.ast.getTreeNode().get(0))).getInv().getTreeNode().addVariableType(this.symbolTable,((ClassifierContext)(this.ast.getTreeNode().get(0))).getClassName());
 	    	  
-	    	 ocl_start=1;//¦]¬°¦³classifierContext©Ò¥HoperationContext¥²©w¦b²Ä¤G­Ó¦a¤è¥X²{
+	    	 ocl_start=1;//å› ç‚ºæœ‰classifierContextæ‰€ä»¥operationContextå¿…å®šåœ¨ç¬¬äºŒå€‹åœ°æ–¹å‡ºç¾
 	      }
 	      
 	      
-	      //........³B²zoperationContext.........
+	      //........è™•ç†operationContext.........
 	      for(;ocl_start<this.ast.getTreeNode().size();ocl_start++)
-	      {//¨«³X©Ò¦³OperationContext
+	      {//èµ°è¨ªæ‰€æœ‰OperationContext
 	    	  ArrayList<StereoType> stereo=((OperationContext)(this.ast.getTreeNode().get(ocl_start))).getStereoType();
 	    	  for(int stereo_number=0;stereo_number<stereo.size();stereo_number++)
 	    	  {

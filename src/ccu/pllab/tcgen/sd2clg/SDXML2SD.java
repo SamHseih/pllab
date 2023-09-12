@@ -161,26 +161,26 @@ public class SDXML2SD{
 
 		ArrayList<INode> ocl_guard324 = new ArrayList<INode>();//find dom ana
 		for (int temp_transition = 0; temp_transition < transitionArray.size(); temp_transition++)
-		{//³B²ztransition
+		{//è™•ç†transition
 			Node nNode_transition = transitionArray.get(temp_transition);
 			Element eElement_transition = (Element) nNode_transition;
 			if(!eElement_transition.getAttribute("guard").isEmpty())
-			{//¦pªG¦³Å@½Ã±ø¥ó
+			{//å¦‚æœæœ‰è­·è¡›æ¢ä»¶
 				for (int temp_guard = 0; temp_guard < guardArray.size(); temp_guard++) 
-				{//±N©Ò¦³transition°µ³B²z
+				{//å°‡æ‰€æœ‰transitionåšè™•ç†
 					Element eElement_guard = guardArray.get(temp_guard);
 					
 					if(eElement_transition.getAttribute("guard").equals(eElement_guard.getAttribute("xmi:id")))
-					{//¦pªGtransition¤WªºÅ@½Ã±ø¥óªºID»PownedRuleªºID¦P¼Ë
+					{//å¦‚æœtransitionä¸Šçš„è­·è¡›æ¢ä»¶çš„IDèˆ‡ownedRuleçš„IDåŒæ¨£
 						guard_conslist.add(eElement_guard.getAttribute("name"));
 						//---------parse guard -------
 						String inocl, endocl, guardocl = null;
 						inocl="package tcgen\n\tcontext "+SDname+"\n\tinv:\n\t\t";
 						endocl="\nendpackage";
 						guardocl=eElement_guard.getAttribute("name");
-						File dir1 = new File("Examples/"+packageName+"guard"); 
+						File dir1 = new File("../Examples/"+packageName+"guard"); 
 						dir1.mkdir();   
-						FileWriter dataFile = new FileWriter("Examples/"+packageName+"guard/"+SDname+temp_transition+".ocl");
+						FileWriter dataFile = new FileWriter("../Examples/"+packageName+"guard/"+SDname+temp_transition+".ocl");
 						BufferedWriter input = new BufferedWriter(dataFile);
 						input.write(inocl+guardocl+endocl);
 						input.close();
@@ -201,26 +201,26 @@ public class SDXML2SD{
 						//StandaloneFacade.INSTANCE.initialize(new URL("file:./log4j.properties"));
 						//model = StandaloneFacade.INSTANCE.loadUMLModel(uml, new File("./resources/org.eclipse.uml2.uml.resources.jar"));
 						List<tudresden.ocl20.pivot.pivotmodel.Constraint> loaduml= StandaloneFacade.
-								INSTANCE.parseOclConstraints(model, new File("Examples/"+packageName+"guard/"+packageName+temp_transition+".ocl"));
+								INSTANCE.parseOclConstraints(model, new File("../Examples/"+packageName+"guard/"+packageName+temp_transition+".ocl"));
 						List<ccu.pllab.tcgen.ast.Constraint> OCLCons = ast_constructor.parseOclTreeNodeFromPivotModel(loaduml);
 						List<CLGConstraint> testguard=new ArrayList<CLGConstraint>();
 						for(int i=0;i<OCLCons.size();i++)
 						{
-							ASTNode testast = OCLCons.get(i).toPreProcessing();//ASTNode:©â¶H»yªk¾ğ
+							ASTNode testast = OCLCons.get(i).toPreProcessing();//ASTNode:æŠ½è±¡èªæ³•æ¨¹
 							List<INode> testast_1 = null;
 							int savesize=0;
 							testast_1 = testast.getNextNodes();
 							savesize=testast_1.size();
 							for(int j=0;j<savesize;j++)
 							{
-								ocl_guard324.add(testast_1.get(j));//ocl guard 324¬O¤°»ò   ¤@­Óarraylist
+								ocl_guard324.add(testast_1.get(j));//ocl guard 324æ˜¯ä»€éº¼   ä¸€å€‹arraylist
 								if(j==savesize-1)
 								{
 									if(testast_1.get(0).getNextNodes().size()!=0)
 									{
-										testast_1=testast_1.get(0).getNextNodes();//·sªº©â¶H»yªk¾ğ
+										testast_1=testast_1.get(0).getNextNodes();//æ–°çš„æŠ½è±¡èªæ³•æ¨¹
 										savesize=testast_1.size();
-										j=-1;//­«·s¤@¦¸
+										j=-1;//é‡æ–°ä¸€æ¬¡
 									}
 								}
 							}
@@ -243,10 +243,10 @@ guard_conslist = new ArrayList<String>();
 				for (int temp_guard = 0; temp_guard < guardArray.size(); temp_guard++) 
 				{
 					Element eElement_guard =guardArray.get(temp_guard);
-					if(eElement_transition.getAttribute("guard").equals(eElement_guard.getAttribute("xmi:id")))//transition¤WªºguardªºID©MguardªºID¦P
-					{//¦bÅ@½Ã±ø¥óªºlist¥[¤WÅ@½Ã±ø¥óªº¦W¦r
+					if(eElement_transition.getAttribute("guard").equals(eElement_guard.getAttribute("xmi:id")))//transitionä¸Šçš„guardçš„IDå’Œguardçš„IDåŒ
+					{//åœ¨è­·è¡›æ¢ä»¶çš„liståŠ ä¸Šè­·è¡›æ¢ä»¶çš„åå­—
 						guard_cons=eElement_guard.getAttribute("name");
-						guard_conslist.add(eElement_guard.getAttribute("name"));//¦³¤@­Óarraylist¦sguardªºname   //¦ü¥G¥i¥H¥[break
+						guard_conslist.add(eElement_guard.getAttribute("name"));//æœ‰ä¸€å€‹arraylistå­˜guardçš„name   //ä¼¼ä¹å¯ä»¥åŠ break
 					}
 				}
 				List<CLGOperatorNode> listguard=new ArrayList<CLGOperatorNode>();
@@ -255,52 +255,52 @@ guard_conslist = new ArrayList<String>();
 					String a = ocl_guard324.get(abc).toString();
 					String regexp = a.replaceAll("[\\(\\)]", "");
 					regexp=regexp.replaceAll(" ","");
-					regexp=regexp.replaceAll("self.","");// [ \ ( ) ] " " self. ³£¤£¦æ¥Î
+					regexp=regexp.replaceAll("self.","");// [ \ ( ) ] " " self. éƒ½ä¸è¡Œç”¨
 					
 					for(int i=0;i<guard_conslist.size();i++)
 					{
-						String gustr = guard_conslist.get(i);//guard_conlist¬Oarraylist
+						String gustr = guard_conslist.get(i);//guard_conlistæ˜¯arraylist
 						gustr=gustr.replaceAll(" ","");
 						if(regexp.equals(gustr))
-						{//¦pªGregexp = gustr
+						{//å¦‚æœregexp = gustr
 							OperationCallExp _exp = (OperationCallExp) ocl_guard324.get(abc);//operation
-							final List<CLGConstraint> intopreguard = new ArrayList<CLGConstraint>();//¤@­ÓCLGConstraint¦Cªí
+							final List<CLGConstraint> intopreguard = new ArrayList<CLGConstraint>();//ä¸€å€‹CLGConstraintåˆ—è¡¨
 						
 							CLGOperatorNode guardna=null;
-							ccu.pllab.tcgen.AbstractConstraint.CLGConstraint clgliteral=null, clgvariable=null;//­­©w¥u¦³AbstractConstraint.CLGConstraint¤~¦æ
+							ccu.pllab.tcgen.AbstractConstraint.CLGConstraint clgliteral=null, clgvariable=null;//é™å®šåªæœ‰AbstractConstraint.CLGConstraintæ‰è¡Œ
 							String TotalL=null, TotalR=null, Total=null;
 							OperationCallExp Ori_exp= (OperationCallExp)_exp;
-							if(Ori_exp.getSourceExp() instanceof OperationCallExp)//»İ­n¬İgetSourceExp
-							{//¦pªG¬Ooperation
-								Ori_exp=(OperationCallExp)Ori_exp.getSourceExp();//¦³Ori_exp¬O¦]¬°for°j°é
-								clgvariable=parseSD(Ori_exp);//clgvariable¬OCLGConstraint  ¥Î¦b²Ä296¦æ  parseSD¬O¥Î¦bÁÙ¯à¤À¸Ñori_exp
-								Total=_exp.getPropertyName();//Total¬O©ñÄİ©Ê¦W¦r
-								guardna = new CLGOperatorNode(Total);//±NÄİ©Ê³]©w¦¨operator node
+							if(Ori_exp.getSourceExp() instanceof OperationCallExp)//éœ€è¦çœ‹getSourceExp
+							{//å¦‚æœæ˜¯operation
+								Ori_exp=(OperationCallExp)Ori_exp.getSourceExp();//æœ‰Ori_expæ˜¯å› ç‚ºforè¿´åœˆ
+								clgvariable=parseSD(Ori_exp);//clgvariableæ˜¯CLGConstraint  ç”¨åœ¨ç¬¬296è¡Œ  parseSDæ˜¯ç”¨åœ¨é‚„èƒ½åˆ†è§£ori_exp
+								Total=_exp.getPropertyName();//Totalæ˜¯æ”¾å±¬æ€§åå­—
+								guardna = new CLGOperatorNode(Total);//å°‡å±¬æ€§è¨­å®šæˆoperator node
 							}
 							else if(Ori_exp.getSourceExp() instanceof PropertyCallExp)
-							{//¦pªG¬Oproperty
+							{//å¦‚æœæ˜¯property
 								PropertyCallExp p =(PropertyCallExp)Ori_exp.getSourceExp();
 								TotalL=p.getPropertyName();
-								clgvariable=new CLGVariableNode(TotalL);//CLGVariableNode¬d¬İ¬İ  PropertyCallExp³]©w¦¨variable node
+								clgvariable=new CLGVariableNode(TotalL);//CLGVariableNodeæŸ¥çœ‹çœ‹  PropertyCallExpè¨­å®šæˆvariable node
 								Total=_exp.getPropertyName();
-								guardna = new CLGOperatorNode(Total);//CLGOperatorNode¬d¬İ¬İ
+								guardna = new CLGOperatorNode(Total);//CLGOperatorNodeæŸ¥çœ‹çœ‹
 							}
 							else if(Ori_exp.getSourceExp().toString().matches("[0-9]+"))
-							{//¦pªG¬O¼Æ¦r
+							{//å¦‚æœæ˜¯æ•¸å­—
 								TotalL=Ori_exp.getSourceExp().toString();
-								clgvariable=new CLGLiteralNode(TotalL);//CLLiteralNode¬d¬İ¬İ
+								clgvariable=new CLGLiteralNode(TotalL);//CLLiteralNodeæŸ¥çœ‹çœ‹
 								Total=_exp.getPropertyName(); 
 								guardna = new CLGOperatorNode(Total);
 							}
 							if(_exp.getParameterExps().get(0) instanceof OperationCallExp)
-							{//¦pªG¬Ooperation
+							{//å¦‚æœæ˜¯operation
 								Ori_exp=(OperationCallExp)_exp.getParameterExps().get(0);
-								clgliteral=parseSD(Ori_exp);//¦pªGÁÙ¯à¤À¸Ñori_exp
+								clgliteral=parseSD(Ori_exp);//å¦‚æœé‚„èƒ½åˆ†è§£ori_exp
 								Total=_exp.getPropertyName();
 								guardna = new CLGOperatorNode(Total);
 							}
 							else if(_exp.getParameterExps().get(0) instanceof PropertyCallExp)
-							{//¦pªG¬Oproperty
+							{//å¦‚æœæ˜¯property
 								PropertyCallExp p =(PropertyCallExp)_exp.getParameterExps().get(0);
 								TotalR=p.getPropertyName();
 								clgliteral=new CLGVariableNode(TotalR);
@@ -308,38 +308,38 @@ guard_conslist = new ArrayList<String>();
 								guardna = new CLGOperatorNode(Total);
 							}
 							else if(_exp.getParameterExps().get(0).toString().matches("[0-9]+"))
-							{//¦pªG¬O¼Æ¦r
+							{//å¦‚æœæ˜¯æ•¸å­—
 								TotalR=_exp.getParameterExps().get(0).toString();
 								clgliteral=new CLGLiteralNode(TotalR);
 								Total=_exp.getPropertyName();
 								guardna = new CLGOperatorNode(Total);
 							}
 							guardna.setLeftOperand(clgvariable);
-							guardna.setRightOperand(clgliteral);//Boolean:var ¤£µ¥¦¡  ¼Æ¦r
+							guardna.setRightOperand(clgliteral);//Boolean:var ä¸ç­‰å¼  æ•¸å­—
 							if(!guardna.equals(null))
-							{//¬İ¤£À´
-								listguard.add(guardna);//Listguard¥[¤Jguardna  Listguard¦s©ñCLGoperator¡A¦sguardna
-								intopreguard.add(guardna);//intopreguard¦s©ñCLGConstraint¡A¦sguardna
+							{//çœ‹ä¸æ‡‚
+								listguard.add(guardna);//ListguardåŠ å…¥guardna  Listguardå­˜æ”¾CLGoperatorï¼Œå­˜guardna
+								intopreguard.add(guardna);//intopreguardå­˜æ”¾CLGConstraintï¼Œå­˜guardna
 							}
 						}//end if(regexp.equals(guard_cons))
 					}
 				}//end for
-				for(int i=0;i<listguard.size();i++)//listguard¬OList
+				for(int i=0;i<listguard.size();i++)//listguardæ˜¯List
 				{
 					for(int i1=0;i1<guard_conslist.size();i1++)
 					{
-						String guard_stri1=guard_conslist.get(i1);//guard_stri1¬OÅ@½Ã±ø¥óªº¦W¦r
+						String guard_stri1=guard_conslist.get(i1);//guard_stri1æ˜¯è­·è¡›æ¢ä»¶çš„åå­—
 						guard_stri1=guard_stri1.replaceAll(" ", "");
-						if(listguard.get(i).getImgInfo().equals(guard_stri1))//¦pªGlistguard¤¤ªºÅ@½Ã±ø¥ó¬Y¤@¶µµ¥©ó¬Y¤@­ÓÅ@½Ã±ø¥ó
+						if(listguard.get(i).getImgInfo().equals(guard_stri1))//å¦‚æœlistguardä¸­çš„è­·è¡›æ¢ä»¶æŸä¸€é …ç­‰æ–¼æŸä¸€å€‹è­·è¡›æ¢ä»¶
 						{
 							if(listguard.get(i).getOperator().equals("=")) //boolean is equal
-								listguard.get(i).setOperator("==");//µ¥©ó§ï¦¨µ¥©óµ¥©ó
+								listguard.get(i).setOperator("==");//ç­‰æ–¼æ”¹æˆç­‰æ–¼ç­‰æ–¼
 							ArrayList<CLGConstraint> node_now = new ArrayList<CLGConstraint>();
 							ArrayList<CLGConstraint> node_left = new ArrayList<CLGConstraint>();
 							ArrayList<CLGConstraint> node_right = new ArrayList<CLGConstraint>();
 							ArrayList<String> node_now_opetator = new ArrayList<String>();
 							ArrayList<Integer> node_index = new ArrayList<Integer>();
-							ArrayList<String> node_position = new ArrayList<String>();//³o¨Ç¬Onodeªº¸ê®Æ
+							ArrayList<String> node_position = new ArrayList<String>();//é€™äº›æ˜¯nodeçš„è³‡æ–™
 							
 							node_now.add(listguard.get(i));
 							node_now_opetator.add(listguard.get(i).getOperator());
@@ -389,7 +389,7 @@ guard_conslist = new ArrayList<String>();
 									else if(node_left.get(i28)  instanceof CLGOperatorNode)
 									{
 										node_now.add(node_left.get(i28));
-										CLGOperatorNode a = (CLGOperatorNode)node_left.get(i28);//¤£¤@¼Ë
+										CLGOperatorNode a = (CLGOperatorNode)node_left.get(i28);//ä¸ä¸€æ¨£
 										node_left.add(a.getLeftOperand());
 										node_right.add(a.getRightOperand());
 										node_position.add("L");
@@ -433,7 +433,7 @@ guard_conslist = new ArrayList<String>();
 									}
 								}
 							}
-							guard=node_now.get(0);//Transition·|¥[¤J¦¹guard
+							guard=node_now.get(0);//TransitionæœƒåŠ å…¥æ­¤guard
 						}
 					}
 				}
@@ -950,9 +950,9 @@ guard_conslist = new ArrayList<String>();
 						inocl="package tcgen\n\tcontext "+packagename+"\n\tinv:\n\t\t";
 						endocl="\nendpackage";
 						guardocl=eElement_guard.getAttribute("name");
-						File dir1 = new File("Examples/"+packagename+"guard"); 
+						File dir1 = new File("../Examples/"+packagename+"guard"); 
 						dir1.mkdir();   
-						FileWriter dataFile = new FileWriter("Examples/"+packagename+"guard/"+packagename+temp_transition+".ocl");
+						FileWriter dataFile = new FileWriter("../Examples/"+packagename+"guard/"+packagename+temp_transition+".ocl");
 						BufferedWriter input = new BufferedWriter(dataFile);
 						input.write(inocl+guardocl+endocl);
 						input.close();
@@ -971,9 +971,9 @@ guard_conslist = new ArrayList<String>();
 						DresdenOCLASTtoInternelAST ast_constructor = new DresdenOCLASTtoInternelAST(ast_util, context);
 						
 						StandaloneFacade.INSTANCE.initialize(new URL("file:./log4j.properties"));
-						model = StandaloneFacade.INSTANCE.loadUMLModel(uml, new File("resources/org.eclipse.uml2.uml.resources.jar"));
+						model = StandaloneFacade.INSTANCE.loadUMLModel(uml, new File("./resources/org.eclipse.uml2.uml.resources.jar"));
 						List<tudresden.ocl20.pivot.pivotmodel.Constraint> loaduml= StandaloneFacade.
-								INSTANCE.parseOclConstraints(model, new File("Examples/"+packagename+"guard/"+packagename+temp_transition+".ocl"));
+								INSTANCE.parseOclConstraints(model, new File("../Examples/"+packagename+"guard/"+packagename+temp_transition+".ocl"));
 //						List<tudresden.ocl20.pivot.pivotmodel.Constraint> loaduml= StandaloneFacade.
 //								INSTANCE.parseOclConstraints(model, new File
 //								(DataWriter.output_folder_path+"guardOCL/"+packagename+temp_transition+".ocl"));

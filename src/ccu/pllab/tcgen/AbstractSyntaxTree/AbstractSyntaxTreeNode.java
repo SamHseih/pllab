@@ -15,8 +15,8 @@ public abstract class AbstractSyntaxTreeNode {
 	private String id;
 	
 	public AbstractSyntaxTreeNode()
-	{//³Ğ«Ø¤@­Ó»yªk¾ğ
-		this.id=""+node_count++;//¨C¤@­Ónode³Qµ¹¤©¤@­Ó¯S©wªºID,µ¹§¹Node_count+1,¤~·|°ß¤@
+	{//å‰µå»ºä¸€å€‹èªæ³•æ¨¹
+		this.id=""+node_count++;//æ¯ä¸€å€‹nodeè¢«çµ¦äºˆä¸€å€‹ç‰¹å®šçš„ID,çµ¦å®ŒNode_count+1,æ‰æœƒå”¯ä¸€
 	}
 	
 	public void setID(String id)
@@ -36,7 +36,7 @@ public abstract class AbstractSyntaxTreeNode {
 	public abstract CLGConstraint AST2CLG();
 	public abstract CLGConstraint AST2CLG(boolean boundaryAnalysis);
 	public abstract String NodeToString();
-	public abstract void toGraphViz() ;//¦]¬°¨C­ÓÄ~©Óªºª«¥ó¦³¤£¦P¼gªk
+	public abstract void toGraphViz() ;//å› ç‚ºæ¯å€‹ç¹¼æ‰¿çš„ç‰©ä»¶æœ‰ä¸åŒå¯«æ³•
 	public abstract void addVariableType(SymbolTable symbolTable,String methodName);
 	public abstract void changeAssignToEqual();
 	public abstract void conditionChangeAssignToEqual();

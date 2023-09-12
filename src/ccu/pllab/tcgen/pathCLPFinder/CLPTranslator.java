@@ -29,13 +29,7 @@ public class CLPTranslator {
 	private ArrayList<String> object_post;
 	private ArrayList<String> arg_post;
 	private ArrayList<String> result;
-	private String importLibary;
-	private String headCLP;
 	private String bodyCLP;
-	private String wrapperCLP;
-	private List<String> constraintsCLP;
-	private String endNodeCLP;
-	private String clpContent;
 	private String arraycontent = "";
 	private int arraycount = 0;
 	private boolean usedMod;
@@ -50,69 +44,6 @@ public class CLPTranslator {
 	private boolean bounded=false;
 	private int bound;
 	private boolean containException=false;
-	private String temp = "";
-//	private boolean shortestInfeai = false;
-//	
-//	public void setShortestInfeai(Boolean b) {
-//		this.shortestInfeai = b;
-//	}
-	
-	public String getTempSIPCLP(CLGPath path, String clpContent, int mid) {
-		String tempCLP = "";
-		
-		String temp = "";
-		for(int i=path.getPathNodes().size()-2; i>=mid; i--) {
-			CLGConstraintNode cons = (CLGConstraintNode) path.getPathNodes().get(i);
-			temp = cons.toCLPInfo()+",";
-			clpContent = clpContent.replaceAll(temp, "");
-		}
-		tempCLP = clpContent;
-		this.clpContent = tempCLP;
-		
-		return tempCLP;
-	}
-	
-	public String getTempCCSCLP(CLGPath path, int i) {
-		String tempCLP = "";
-//		String temp = "";
-		String tempCLPContent = "";
-		tempCLPContent = this.clpContent;
-		
-		CLGConstraintNode cons = (CLGConstraintNode) path.getPathNodes().get(i);
-		this.temp = cons.toCLPInfo() + ",";
-		
-		tempCLPContent = tempCLPContent.replace(this.temp, "");
-
-		tempCLP = tempCLPContent;
-		
-		return tempCLP;
-	}
-	
-//	20200808 CCS¦b¥h°£«á½T»{µL¸Ñªº¸`ÂI­n¶i¦æ§R°£
-	public void setTempCLPByCCS() {
-		this.clpContent = this.clpContent.replace(this.temp, "");
-		this.temp = "";
-	}
-	
-	public String getImportLibary() {
-		return this.importLibary;
-	}
-	
-	public String getHeadCLP() {
-		return this.headCLP;
-	}
-	
-	public String getBodyCLP() {
-		return this.bodyCLP;
-	}
-	
-	public String getWrapperCLP() {
-		return this.wrapperCLP;
-	}
-	
-	public String getEndNodeCLP() {
-		return this.endNodeCLP;
-	}
 	
 	public void setInvCLP(String invCLP) {
 		this.invCLP = invCLP;
@@ -139,7 +70,7 @@ public class CLPTranslator {
 		}
 	}
 
-	private final String delayMod = "delay o_mod(M,N,_) if nonground([M,N]).\n" + "o_mod(M,N,R):-\n" + "mod(M,N,R).\n";
+	private final String delayMod = "delay o_mod(M,N,_) if nonground([M,N]).\n" + "o_mod(M,N,R):-\n" + "mod(M,N,R).";
 
 	private final String findElement = "findelement(Sequence,X,Index):-\n" + "Index#>1,\n" + "Index1#=Index-1,\n" + "subsequence(Sequence,Sequence_post),\n" + "findelement(Sequence_post,X,Index1).\n"
 			+ "findelement(Sequence,X,1):-\n" + "sequenceFirst(Sequence, X).\n" + "sequenceFirst([H|_], H).\n" + "subsequence([_|H], H).\n";
@@ -322,12 +253,10 @@ public class CLPTranslator {
 	public int getArrayCount() {
 		return this.arraycount;
 	}
-	
-	public int getBodycount()
-	{
+public int getBodycount()
+{
 	return body_count;
-	}
-	
+}
 	public String genPathCLP(CLGPath path) {
 		this.usedMod = false;
 		Main.issort=false;
@@ -340,18 +269,14 @@ public class CLPTranslator {
 		containException=false;
 		String completeCLP = "";
 		completeCLP += this.importLibraryCLP();
-		this.importLibary = this.importLibraryCLP();
 		this.startNode = path.getPathNodes().get(0);
 		Main.ifCLP = "";
 		Main.head = "";
-		uselength=0;
-		
-		this.genBodyName((CLGStartNode) this.startNode, this.body_count, path.getPathNodes());// List<CLGNode> path¥[ªº
-		
-//		head -> dateNext_2([Year_pre,Month_pre,Day_pre],[],[Year,Month,Day],[],[Result],[Exception]):-
+uselength=0;
+		this.genBodyName((CLGStartNode) this.startNode, this.body_count, path.getPathNodes());// List<CLGNode> pathåŠ çš„
 		String head = this.getHeadInfo();
 		Main.head = head.substring(head.indexOf('('), head.indexOf(')') + 1);
-		
+
 		this.bodyCLP = this.genBodyCLP(path.getPathNodes(), body_count);
 		if(bodyCLP.contains("Size#=(Size_pre+1)"))
 		{
@@ -364,7 +289,6 @@ public class CLPTranslator {
 			bodyCLP=bodyCLP.replaceAll(",Size=Size_pre", "");
 		}
 		
-//		­Y³o­ÓCLP¦³exception«h­×§ïhead
 		if(bodyCLP.contains("Exception"))
 			containException=true;
 		else
@@ -372,11 +296,8 @@ public class CLPTranslator {
 		
 		if(!bodyCLP.contains("Result"))
 			head=head.replace("[Result]", "[]");
-		this.headCLP = head;
 		completeCLP += head;
 		completeCLP += this.bodyCLP;
-		
-//		genWrapperCLP() ²£¥Í©³³¡clp
 		completeCLP += this.genWrapperCLP((CLGStartNode) path.getPathNodes().get(0), body_count);
 		
 		completeCLP += this.invCLP();
@@ -441,8 +362,6 @@ public class CLPTranslator {
 			completeCLP=completeCLP.replaceAll("dcl_1dInt_array(Array_pre, ArraySize_pre),\n", "");
 	//	if(completeCLP.contains("Index)"))
 		//	completeCLP=completeCLP.replaceAll("Index)", "ArrayIndex)");
-
-		
 		System.out.println("complete:\n" + completeCLP);
 		return completeCLP;
 	}
@@ -558,7 +477,6 @@ public class CLPTranslator {
 		if(wrapperCLP.contains("Unsort")&&!wrapperCLP.contains("Search"))
 			Main.issort=true;
 		/********/
-//		³]©wclp¤¤domainªº­È°ì
 		wrapperCLP += this.genDomain(startNode);
 		/********/
 		boolean isarray = false;
@@ -713,8 +631,7 @@ public class CLPTranslator {
 			{
 				wrapperCLP += this.genStateAligned(startNode);
 				/********/
-//				¨S¥Î¦n¹³
-				wrapperCLP += this.genInvariant(); 
+				wrapperCLP += this.genInvariant();
 				/********/
 
 				wrapperCLP += this.genBodyCall(startNode, pathNumber);
@@ -735,10 +652,10 @@ public class CLPTranslator {
 			wrapperCLP += labelword;
 		}
 		/********/
-		
-		this.wrapperCLP = wrapperCLP;
+
 		return wrapperCLP;
 	}
+
 
 	private String genWrapperName(CLGStartNode startNode) {
 		String clpPredicateName = "test";
@@ -881,7 +798,7 @@ public class CLPTranslator {
 					
 						temp = temp.toUpperCase().charAt(0) + temp.substring(1);
 						if(twoD)
-						{//¤Gºû
+						{//äºŒç¶­
 							domainPredicate += "dim(" + temp + "_pre,[Row_pre,Col_pre]),\n";
 							if(row>0)
 								domainPredicate +="dcl_2dInt_array("+temp+"_pre,Row_pre,Col_pre),\n";
@@ -889,9 +806,9 @@ public class CLPTranslator {
 							domainPredicate	+= "dim(" + temp + ",[Col_pre,Row_pre]),\n";
 						}
 						else
-						{//¤@ºû
+						{//ä¸€ç¶­
 							if(!Main.msort)
-							{//·íª«¥ó«e¤£¬O¤w±Æ§Ç
+							{//ç•¶ç‰©ä»¶å‰ä¸æ˜¯å·²æŽ’åº
 							//	domainPredicate += "intSequenceInstances(Size_pre," + temp + "_pre),\n";
 								domainPredicate += "dcl_1dInt_array("+temp+"_pre, Size_pre),\n";
 								if(uselength==0)
@@ -987,7 +904,7 @@ public class CLPTranslator {
 							domainPredicate += temp.toUpperCase().charAt(0) + temp.substring(1) + "Size_pre#=" + size + ",\n";
 						}
 						if(twoD)
-						{//¤Gºû
+						{//äºŒç¶­
 							temp = temp.toUpperCase().charAt(0) + temp.substring(1);
 							domainPredicate += "dim(" + temp + "_pre,[ArrayRow_pre,ArrayCol_pre]),\n";
 							if(arrayrow>0)
@@ -1290,21 +1207,14 @@ public class CLPTranslator {
 				//constraintList.add(((CLGConstraintNode) path.get(i)).getConstraint());
 			}
 		}
-		HashMap<String, Integer> iterateTimes=new HashMap<String, Integer>();
-		HashMap<CLGConstraintNode, Integer> conNodeiterateTimes=new HashMap<CLGConstraintNode, Integer>();
-//		constraintList ¤¤±N¨C¤@­Óconstraint ¸`ÂI¤@¤@¨ú¥X¼g¤J¨ìbodyCLP
+HashMap<String, Integer> iterateTimes=new HashMap<String, Integer>();
+HashMap<CLGConstraintNode, Integer> conNodeiterateTimes=new HashMap<CLGConstraintNode, Integer>();
 		for (CLGConstraint c : constraintList) {
 			if (c instanceof CLGOperatorNode) {
 				if (((CLGOperatorNode) c).getOperator().equals("=")) {
-//					Resultªº¼g¤J¸g¹L³oÃä
 					this.renameUseVar(((CLGOperatorNode) c).getRightOperand());
 					this.renameDefVar(((CLGOperatorNode) c).getLeftOperand());
 					String temp = c.getCLPInfo();
-					
-//					2020/3/4 ocl¦^¶Ç­È¬°class®É¡A±N¼Ð¥ÜªºclassÃöÁä¦r±q²£¥Íªºclp¤¤¥h°£
-					if(temp.contains("class"))
-						temp=temp.replaceAll("#=class", "=");
-					
 					if(temp=="")
 						continue;
 					if (c.getCLPInfo().contains("mod"))
@@ -1520,8 +1430,7 @@ public class CLPTranslator {
 		}
 		else {
 		
-//		test it  -> It_
-		if (bodyCLP.contains("It_")) {
+		if (bodyCLP.contains("it")) {
 			String cutCLP = bodyCLP.substring(0, bodyCLP.indexOf("It_"));
 			bodyCLP = cutCLP.replaceAll("it", "It") + bodyCLP.substring(bodyCLP.indexOf("It_"));
 			ArrayList<String> cut = new ArrayList<String>();
@@ -1618,13 +1527,11 @@ public class CLPTranslator {
 		bodyCLP=connect;*/
 		}
 		bodyCLP += this.stateAssignEquals(startNode);
-		System.out.println(startNode.getClassName());
+		System.out.println("fuck:"+startNode.getClassName());
 		if (!bodyCLP.contains("Exception") && Main.invCLP != null && Main.invCLP != ""&&!startNode.getClassName().equals("SortedArray")) {
 			bodyCLP += "," + Main.invCLP;
 		}
-		
 		bodyCLP += endNode.toCLPInfo() + "\n";
-		this.endNodeCLP = endNode.toCLPInfo() + "\n";
 		return bodyCLP;
 	}
 
@@ -1641,13 +1548,13 @@ public class CLPTranslator {
 					if (variableToken.getVariableName().equals(temp)) {
 					//	if (!variableToken.getType().contains("[") ||Main.msort||twoD||)
 						if (!(startNode.getMethodName().contains("push")||startNode.getMethodName().contains("pop")||startNode.getMethodName().contains("enqueue")||startNode.getMethodName().contains("dequeue")))
-							stateAssignEquals += ",\n" + object + "=" + object + "_pre";
+							stateAssignEquals += "," + object + "=" + object + "_pre";
 					}
 				}
 				}
 		
 		for (String arg : this.arg_post)
-			stateAssignEquals += ",\n" + arg + "=" + arg + "_pre";
+			stateAssignEquals += "," + arg + "=" + arg + "_pre";
 
 		return stateAssignEquals;
 	}
@@ -1656,42 +1563,21 @@ public class CLPTranslator {
 		if (constraint instanceof CLGVariableNode) {
 			
 			String variable = constraint.getCLPValue();
-			
-			if(variable.contains("data")) {
-				if (!variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
-					variableSet.put(variable, 1);
-					constraint.setCLPValue(variable);
-				} else if (variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
-					constraint.setCLPValue(variable + "_" + (variableSet.get(variable) + 1));
-					variableSet.put(variable, variableSet.get(variable) + 1);// + 1);
-				}
-			}else {
-				variable = variable.replaceAll("_pre", "");
+			variable = variable.replaceAll("_pre", "");
 
-				if (!variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
-					variableSet.put(variable, 1);
-					constraint.setCLPValue(variable);
-				} else if (variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
-					constraint.setCLPValue(variable + "_" + (variableSet.get(variable) + 1));
-					variableSet.put(variable, variableSet.get(variable) + 1);// + 1);
-				}
-			}
+			if (!variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
+				
+				
+				variableSet.put(variable, 1);
+				constraint.setCLPValue(variable);
+				
+			} else if (variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
+				constraint.setCLPValue(variable + "_" + (variableSet.get(variable) + 1));
+				variableSet.put(variable, variableSet.get(variable) + 1);// + 1);
+
 			
-//			variable = variable.replaceAll("_pre", "");
-//			if (!variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
-//				variableSet.put(variable, 1);
-//				constraint.setCLPValue(variable);
-//			} else if (variableSet.containsKey(variable) && !variable.contains("result") && !variable.equals("") && !variable.contains("_")&&((!twoD)||variable.contains("acc"))) {
-//				constraint.setCLPValue(variable + "_" + (variableSet.get(variable) + 1));
-//				variableSet.put(variable, variableSet.get(variable) + 1);// + 1);
-//			}
+			}
 		}
-		
-//		else if(((CLGOperatorNode) constraint).getOperator().equals("%") && constraint instanceof CLGOperatorNode){
-////			2020/3/10
-//			this.renameUseVar(((CLGOperatorNode) constraint).getLeftOperand());
-//			this.renameUseVar(((CLGOperatorNode) constraint).getRightOperand());
-//		}
 	}
 
 	private void renameUseVar(CLGConstraint constraint) {
@@ -1713,7 +1599,8 @@ public class CLPTranslator {
 				else
 					constraint.setCLPValue(variable + "_" + variableSet.get(variable));// + "_" + variableSet.get(constraint.getCLPValue()));
 			}
-		} 
+			
+		}
 
 	}
 

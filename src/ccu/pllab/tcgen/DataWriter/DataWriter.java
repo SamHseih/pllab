@@ -8,17 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ccu.pllab.tcgen.exe.main.Main;
-import tcgenplugin_2.handlers.BlackBoxHandler;
+
 
 public class DataWriter {
 	private static FileWriter fw = null;
 	private static BufferedWriter bw = null;
 
 	public static String output_folder_path = Main.output_folder_path;
-	public static String Clg_output_path ;
-	public static String testPath_output_path ;
-	public static String testCons_output_path ;
-	public static String testData_output_path ;
 	
 	public static void writeInfo(Object data, String fileName, String fileType, String fileDes, String folderName) {
 		
@@ -51,23 +47,16 @@ public class DataWriter {
 
 	public static void writeInfo(String data, String fileName, String fileType, String fileDes) {
 		try {
-			//System.out.println("fileName  " + fileDes + fileName);
+			System.out.println("fileName  " + fileDes + fileName);
 			// fw = new FileWriter(outputPath+fileName+"."+fileType, false); //
-			// ¹w³]¬Ofals~¦p¸ê®Æ§¨¤¤¦³¸ê®Æ·|§R°£­ì¸ê®Æ¦L·sªº
-			File folder = new File(fileDes);
-			
-			if(!folder.exists()){
-				folder.mkdirs();
-			}
-			File f= new File(fileDes + fileName + "." + fileType);
-			fw = new FileWriter(f, false);
+			// é è¨­æ˜¯fals~å¦‚è³‡æ–™å¤¾ä¸­æœ‰è³‡æ–™æœƒåˆªé™¤åŸè³‡æ–™å°æ–°çš„
+			fw = new FileWriter(fileDes + fileName + "." + fileType, false);
 			bw = new BufferedWriter(fw);
 			// for(int i = 0; i < data.length ; i++){
-			bw.write(data + "\n"); // ¥[¤W"\n"Åı¤å¦r´«¦æ"
-			// bw.newLine(); //­Y­n³]©w¦¨¾ã¦æ·sªº¸ê®Æ±N¤W¤è"\n"§R°£¨Ï¥Î³o¦æ
+			bw.write(data + "\n"); // åŠ ä¸Š"\n"è®“æ–‡å­—æ›è¡Œ"
+			// bw.newLine(); //è‹¥è¦è¨­å®šæˆæ•´è¡Œæ–°çš„è³‡æ–™å°‡ä¸Šæ–¹"\n"åˆªé™¤ä½¿ç”¨é€™è¡Œ
 			// }
 		} catch (IOException e) {
-			System.out.println(e);
 		} finally {
 			try {
 				bw.close();
@@ -79,13 +68,13 @@ public class DataWriter {
 	public static void writeInfo(ArrayList<String> data, String fileName, String fileType, String fileDes) {
 		try {
 			// System.out.println("ArrayList String");
-			fw = new FileWriter(fileDes + fileName + "." + fileType, false); // ¹w³]¬Ofals~¦p¸ê®Æ§¨¤¤¦³¸ê®Æ·|§R°£­ì¸ê®Æ¦L·sªº
+			fw = new FileWriter(fileDes + fileName + "." + fileType, false); // é è¨­æ˜¯fals~å¦‚è³‡æ–™å¤¾ä¸­æœ‰è³‡æ–™æœƒåˆªé™¤åŸè³‡æ–™å°æ–°çš„
 			// fw = new FileWriter(outputPath+fileName+"."+fileType, false);
 			bw = new BufferedWriter(fw);
 			System.out.println("ArrayList String");
 			for (int i = 0; i < data.size(); i++) {
-				bw.write(data.get(i) + "\n"); // ¥[¤W"\n"Åı¤å¦r´«¦æ"
-				// bw.newLine(); //­Y­n³]©w¦¨¾ã¦æ·sªº¸ê®Æ±N¤W¤è"\n"§R°£¨Ï¥Î³o¦æ
+				bw.write(data.get(i) + "\n"); // åŠ ä¸Š"\n"è®“æ–‡å­—æ›è¡Œ"
+				// bw.newLine(); //è‹¥è¦è¨­å®šæˆæ•´è¡Œæ–°çš„è³‡æ–™å°‡ä¸Šæ–¹"\n"åˆªé™¤ä½¿ç”¨é€™è¡Œ
 			}
 		} catch (IOException e) {
 		} finally {
@@ -94,16 +83,6 @@ public class DataWriter {
 			} catch (IOException e) {
 			}
 		}
-	}
-	
-	public static void initOutputPath() {
-		String[] paths = new String[]{DataWriter.Clg_output_path, DataWriter.testPath_output_path, DataWriter.testCons_output_path, DataWriter.testData_output_path};
-		for(String p : paths) {
-			File f = new File(p);
-			if (!f.exists()) {
-				f.mkdirs();
-			}
-		}	
 	}
 
 }

@@ -135,7 +135,7 @@ public class OperationContext extends AbstractSyntaxTreeNode{
 	
 	@Override
 	public final void toGraphViz() 
-	{//¤@­Ó»¼°j¨ç¦¡¡A¨ÓµeAST¹Ï
+	{//ä¸€å€‹éè¿´å‡½å¼ï¼Œä¾†ç•«ASTåœ–
 		String astInformation=this.ASTInformation();
 		for(StereoType stereo:this.stereoType)
 		{

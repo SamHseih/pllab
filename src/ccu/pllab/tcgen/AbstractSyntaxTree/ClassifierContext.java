@@ -10,7 +10,7 @@ import ccu.pllab.tcgen.AbstractConstraint.*;
 
 public class ClassifierContext extends AbstractSyntaxTreeNode{
 	String className;
-	private StereoType inv;//¤@©w¬Oinv¡A©Ò¥H¤£¥ÎAbstractSyntaxTreeNode
+	private StereoType inv;//ä¸€å®šæ˜¯invï¼Œæ‰€ä»¥ä¸ç”¨AbstractSyntaxTreeNode
 	
 	public ClassifierContext(String className) {
 		super();
@@ -76,9 +76,9 @@ public class ClassifierContext extends AbstractSyntaxTreeNode{
 	
 	@Override
 	public final void toGraphViz() 
-	{//¤@­Ó»¼°j¨ç¦¡¡A¨ÓµeAST¹Ï
+	{//ä¸€å€‹éè¿´å‡½å¼ï¼Œä¾†ç•«ASTåœ–
 			System.out.println(this.ASTInformation()+"->"+this.inv.ASTInformation());
-			this.inv.toGraphViz();//»¼°j
+			this.inv.toGraphViz();//éè¿´
 	}
 	
 	@Override

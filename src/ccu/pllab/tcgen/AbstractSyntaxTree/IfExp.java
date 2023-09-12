@@ -19,7 +19,7 @@ public class IfExp  extends AbstractSyntaxTreeNode{
 	AbstractSyntaxTreeNode thenExp;
 	AbstractSyntaxTreeNode elseExp;
 	
-	//¤l¸`ÂI¨S¦³else
+	//å­ç¯€é»žæ²’æœ‰else
 	public IfExp(String ifExp,AbstractSyntaxTreeNode condition,AbstractSyntaxTreeNode then) {
 		super();
 		this.ifExp=ifExp;
@@ -28,7 +28,7 @@ public class IfExp  extends AbstractSyntaxTreeNode{
 		
 	}
 	
-	//¤l¸`ÂI¦³else
+	//å­ç¯€é»žæœ‰else
 	public IfExp(String ifExp,AbstractSyntaxTreeNode condition,AbstractSyntaxTreeNode then,AbstractSyntaxTreeNode elseExp) {
 		super();
 		this.ifExp=ifExp;
@@ -137,10 +137,10 @@ public class IfExp  extends AbstractSyntaxTreeNode{
 	
 	@Override
 	public final void toGraphViz() 
-	{//¤@­Ó»¼°j¨ç¦¡¡A¨ÓµeAST¹Ï
+	{//ä¸€å€‹éžè¿´å‡½å¼ï¼Œä¾†ç•«ASTåœ–
 			String astInformation=this.ASTInformation();
 			System.out.println(astInformation+"->"+this.conditionExp.ASTInformation());
-			this.conditionExp.toGraphViz();//»¼°j
+			this.conditionExp.toGraphViz();//éžè¿´
 			System.out.println(astInformation+"->"+this.thenExp.ASTInformation());
 			this.thenExp.toGraphViz();
 			if(this.elseExp!=null)

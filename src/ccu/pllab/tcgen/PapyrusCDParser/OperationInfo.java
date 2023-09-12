@@ -9,7 +9,7 @@ public class OperationInfo {
 	private VariableInfo return_Type ;
 	private String id ;
 	private String visibility ;
-	private String className ;  // ©ÒÄÝÃþ§O
+	private String className ;  // æ‰€å±¬é¡žåˆ¥
 	
 	public OperationInfo() {
 		name="";

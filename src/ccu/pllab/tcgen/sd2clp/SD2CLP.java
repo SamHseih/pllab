@@ -40,9 +40,9 @@ public class SD2CLP {
 			for(int i=0; i < st.getSDAttribute().size();i++) {
 				attributes.add(st.getSDAttribute().get(i).substring(0, 1).toUpperCase() + st.getSDAttribute().get(i).substring(1,st.getSDAttribute().get(i).length()));
 			}
-			File dir = new File("examples/"+st.getSDName()+"CLP"); 
+			File dir = new File("../examples/"+st.getSDName()+"CLP"); 
 			dir.mkdir();
-			FileWriter dataFile = new FileWriter("examples/"+st.getSDName()+"CLP/"+st.getSDName()+"Preamble.ecl");
+			FileWriter dataFile = new FileWriter("../examples/"+st.getSDName()+"CLP/"+st.getSDName()+"Preamble.ecl");
 			BufferedWriter input = new BufferedWriter(dataFile);
 			//get state information
 			
@@ -57,9 +57,9 @@ public class SD2CLP {
 						method = null;
 					else {
 						methodParameters.clear();
-						//Åª¨ú¨ç¦¡¦WºÙ
+						//è®€å–å‡½å¼åç¨±
 						method = ((CLGMethodInvocationNode) st.getStates().get(i).getTransitions().get(j).getMethod()).getMethodName();
-						//Åª¨ú°Ñ¼Æ
+						//è®€å–åƒæ•¸
 						for(String element: ((CLGMethodInvocationNode) st.getStates().get(i).getTransitions().get(j).getMethod()).getMethodArgument()) {
 							methodParameters.add(element.substring(0, 1).toUpperCase() + element.substring(1));
 						}
@@ -69,7 +69,7 @@ public class SD2CLP {
 					
 					//get target state
 					target = st.getStates().get(i).getTransitions().get(j).getTarget().getName();
-					//§PÂ_source target¬O§_²Å¦Xclp³W©w ¨Ã²£¥Íclp
+					//åˆ¤æ–·source targetæ˜¯å¦ç¬¦åˆclpè¦å®š ä¸¦ç”¢ç”Ÿclp
 //					if(source.matches("[a-z][a-zA-Z0-9_]*") && source.matches("[a-z][a-zA-Z0-9_]*")) {
 //						clp = this.genCLP(source, transition, guard, target);
 //						input.write(clp);
@@ -154,7 +154,7 @@ public class SD2CLP {
 		return clp;
 	}
 	
-	/*´ú¸Õ¥Î*/
+	/*æ¸¬è©¦ç”¨*/
 //	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, TemplateException, ModelAccessException, ParseException, org.apache.commons.cli.ParseException, JSONException, EclipseException {
 //		SDXML2SD parsd = new SDXML2SD();
 //		StateDigram st=parsd.convert(new File("C:/tcgen/examples/unboundedStack/unboundedStackSD.uml"),new File("C:/tcgen/examples/unboundedStack/unboundedStack(old).uml"));

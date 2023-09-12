@@ -332,14 +332,14 @@ public class Constraint extends ASTNode {
 	
 		((CLGStartNode) clggraph.getStartNode()).setClassName(this.getConstraintedClassName());
 		((CLGStartNode) clggraph.getStartNode()).setMethodName(this.getConstraintedMethodName());
-		/*³]©wattribute*/
+		/*è¨­å®šattribute*/
 		for(int i = 0 ; i< model.getClasses().size() ;i++) {
 			for(int j = 0; j< model.getClasses().get(i).getAttrList().size(); j++) {
 				attribute.add(model.getClasses().get(i).getAttrList().get(j).getName());
 			}
 		}
 		((CLGStartNode) clggraph.getStartNode()).setClassAttributes(attribute);
-		/*³]©wmethod arg*/
+		/*è¨­å®šmethod arg*/
 		for(int k = 0 ; k< model.getClasses().size() ;k++) {
 			if(model.getClasses().get(k).findMethod(this.getConstraintedMethodName()) != null) {
 				for(int l =0; l<model.getClasses().get(k).findMethod(this.getConstraintedMethodName()).getArgList().size();l++) {
