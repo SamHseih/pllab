@@ -278,8 +278,4 @@ public class IterateExp extends AbstractSyntaxTreeNode{
 		
 		return null;
 	}
-	@Override
-	public String getExpreesion() {
-		return "IterateExp";
-	}
 }

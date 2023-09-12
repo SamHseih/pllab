@@ -33,9 +33,7 @@ public class CLP2DataFactory {
   
 	public static CLP2Data getEcl2DataInstance() throws EclipseException, IOException {
 		if (instance == null) {
-			try {
-			File ec = new File("C:\\TcgenTools\\ECLiPSe");
-			EclipseEngineOptions eclipseEngineOptions = new EclipseEngineOptions(ec);
+			EclipseEngineOptions eclipseEngineOptions = new EclipseEngineOptions();
 			eclipseEngineOptions.setUseQueues(false);
 			instance = EmbeddedEclipse.getInstance(eclipseEngineOptions);
 //			eclipseRPCInputStream(instance, Ecl2Data.class.getResourceAsStream("/imports/ccu_pllab_lib.ecl"));
@@ -44,9 +42,6 @@ public class CLP2DataFactory {
 //			eclipseRPCInputStream(instance, Ecl2Data.class.getResourceAsStream("/imports/ocl_iterators.ecl"));
 //			eclipseRPCInputStream(instance, Ecl2Data.class.getResourceAsStream("/imports/properties.ecl"));
 //			eclipseRPCInputStream(instance, Ecl2Data.class.getResourceAsStream("/imports/uml_basic.ecl"));
-			} catch(Exception ex) {
-				System.out.println(ex);
-			}
 		}
 		return new CLP2Data(instance);
 

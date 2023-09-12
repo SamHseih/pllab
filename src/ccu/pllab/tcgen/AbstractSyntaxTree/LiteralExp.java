@@ -8,7 +8,6 @@ import ccu.pllab.tcgen.ASTGraph.ASTGraphNode;
 import ccu.pllab.tcgen.AbstractCLG.CLGGraph;
 import ccu.pllab.tcgen.AbstractConstraint.*;
 import scala.tools.nsc.symtab.Types.ContainsCollector;
-import version_AST.ReduceLiteralExp;
 
 public class LiteralExp extends AbstractSyntaxTreeNode{
 	private String type;
@@ -20,12 +19,6 @@ public class LiteralExp extends AbstractSyntaxTreeNode{
 		this.type=declareType;
 		this.value=declareValue;
 		
-	}
-	
-	public LiteralExp(ReduceLiteralExp literalNode) {
-		super();
-		this.type = literalNode.getType();
-		this.value = literalNode.getValue();
 	}
 	
 	public String getType()
@@ -132,9 +125,5 @@ public class LiteralExp extends AbstractSyntaxTreeNode{
 	{
 		LiteralExp literalExp=new LiteralExp(this.type, this.value);
 		return literalExp;
-	}
-	@Override
-	public String getExpreesion() {
-		return "LiteralExp";
 	}
 }

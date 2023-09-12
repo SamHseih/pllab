@@ -2,9 +2,11 @@ package ccu.pllab.tcgen.AbstractSyntaxTree;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ccu.pllab.tcgen.AbstractConstraint.*;
 import ccu.pllab.tcgen.ASTGraph.ASTGraphNode;
+import ccu.pllab.tcgen.AbstractCLG.CLGGraph;
 
 public class PackageExp extends AbstractSyntaxTreeNode{
 	String packageName;
@@ -19,10 +21,6 @@ public class PackageExp extends AbstractSyntaxTreeNode{
 	public ArrayList<AbstractSyntaxTreeNode> getTreeNode()
 	{
 		return this.context;
-	}
-	
-	public String getpackageName() {
-		return this.packageName;
 	}
 	
 	public void addTreeChildNode(AbstractSyntaxTreeNode ...  childNode)
@@ -106,9 +104,5 @@ public class PackageExp extends AbstractSyntaxTreeNode{
 	public AbstractSyntaxTreeNode ASTclone()
 	{
 		return null;
-	}
-	@Override
-	public String getExpreesion() {
-		return "PackageExp";
 	}
 }

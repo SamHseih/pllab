@@ -172,13 +172,6 @@ public class CLGStartNode extends CLGNode {
 		}
 		catch (Exception e) {
 		}	
-		/*
-		if(CLP.contains("Now#=Time(H,M,S),")) {
-			CLP=CLP.replace("Now#=Time(H,M,S),",  "timeTime([H_pre,M_pre,S_pre],Now,[H,M,S],[],[]),\r\n");
-			
-			//bodyCLP=bodyCLP.replace("D#=Date(Dy,Dm,Dd),", "dateDate([Dy_pre,Dm_pre,Dd_pre],D,[Dy,Dm,Dd],[],[]),\r\n");
-			//+"D=Obj
-		}*/
 		return CLP;
 	}
 	
@@ -242,7 +235,6 @@ public class CLGStartNode extends CLGNode {
 			clp.get(0).add("	"+ className + methodName + "_node_" +((CLGConnectionNode)this.getSuccessor().get(0)).getConnectionId()+"("+attributes_pre +","+ arg_pre +","+ attributes_post +","+ arg_post+", "+ return_value+", Exception, "+ localParameters +"). \n");
 		}
 		clp.addAll(this.getSuccessor().get(0).genMethodCLP(className, methodName, attributes_post, arg_post, localParameters, return_value));
-
 		return clp;
 	}
 	

@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import org.xml.sax.SAXException;
+
 
 import ccu.pllab.tcgen.AbstractSyntaxTree.*;
-import ccu.pllab.tcgen.AbstractType.*;
 import ccu.pllab.tcgen.exe.main.Main;
-import ccu.pllab.tcgen.launcher.BlackBoxLauncher;
 import ccu.pllab.tcgen.oclRunner.OclLexer;
 import ccu.pllab.tcgen.oclRunner.OclParser;
 import ccu.pllab.tcgen.PapyrusCDParser.*;
@@ -19,8 +17,6 @@ import ccu.pllab.tcgen.PapyrusCDParser.*;
 
 import java.util.ArrayList;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import java.io.File; 
 public class OCL2AST {
@@ -34,30 +30,18 @@ public class OCL2AST {
 //	      makeSymbolTable(classuml);
 //	      Main.symbolTable=this.symbolTable;
 //	      typeToAst(); 
-	}		
-
-	public OCL2AST(File ocl, File classuml) throws Exception {
-		Main.className = "";
-		makeAST(ocl);
-		makeSymbolTable(classuml);
-		Main.symbolTable = this.symbolTable;
-		typeToAst();
-	}
-	
-	//for create Version AST
-	public OCL2AST(File ocl) throws IOException {
-		makeAST(ocl);
-	}
+	}	
 	
 	public AbstractSyntaxTreeNode getAbstractSyntaxTree()
 	{
 		return this.ast;
 	}		
 	
-	public SymbolTable getSymbolTable() {
+	public SymbolTable getSymbolTable()
+	{
 		return this.symbolTable;
 	}
-
+	  
 	public void makeAST(File ocl) throws IOException
 	{//OCL轉換成抽象語法樹
 		InputStream is = System.in;
@@ -71,44 +55,21 @@ public class OCL2AST {
 	      is.close();
 	}
 	
-	public void makeSymbolTable(File classuml) throws ParserConfigurationException, SAXException, IOException, TransformerException
+	public void makeSymbolTable(File classuml)
 	{
 		//類別圖分析..黎怡伶做的
-			SingleCDParser classParser = new SingleCDParser() ;
-			classParser.Parse( classParser.init(classuml) );
-
+			SingleCDParser classParser = new SingleCDParser(classuml) ;
+			classParser.Parse();
+			classParser.changeTypeStr();
+			
 		//開始做symbol table
 			this.symbolTable=new SymbolTable(classParser.getPkgName());
 		    ClassInfo c = classParser.getClassList().get(0);
 		    Main.className=c.getName();
-		    
-		    //測試類別資訊是否正確
-		    System.out.println(classParser.printParseClassInfo(c));
-		    System.out.println(BlackBoxLauncher.typeTable.printTypeTableInfo());
-		    
 		   
 		    for(int j= 0; c.getProperties()!= null && j < c.getProperties().size();j++ ) {
 		    	VariableInfo p = c.getProperties().get(j);
-		    	
-		    	//2020處理sort_ YiLing
-		    	
-		    	// ArrayList
-		    	if(p.getType() instanceof ArrayListType) {
-		    		Main.isArraylist=true;
-		    		//二維
-		    		if( ((ArrayListType)p.getType()).getElement() instanceof ArrayListType)
-		    			Main.twoD=true;
-		    		else Main.doArray=true;
-		    	}
-		    	// Array
-		    	else if (p.getType() instanceof ArrayType) {
-		    		Main.doArray=true;
-		    		//二維
-		    		if( ((ArrayType)p.getType()).getElement() instanceof ArrayType)
-		    			Main.twoD=true;   		
-		    	}
 		  
-		    	/*
 		    	//....處理sort
 		    	if(p.getType().equals("ArrayList"))
 		    	{
@@ -156,7 +117,7 @@ public class OCL2AST {
 		    	//	 Main.doArray=true;
 		    	}
 		    	
-		    	}*/
+		    	}
 				//put property into symboltalbe
 		    	VariableToken variable=new VariableToken(p.getName(),p.getType());
 		    	this.symbolTable.addAttribute(variable);
@@ -166,34 +127,15 @@ public class OCL2AST {
 		    for(int k= 0; c.getOperations()!= null && k < c.getOperations().size();k++ ) {
 		    	OperationInfo o = c.getOperations().get(k);
 		    	MethodToken method=new MethodToken(o.getName());
-		    	String varStr=o.getReturnType().getClass().toString().substring(0,o.getReturnType().getClass().toString().length()-4 );
-		    	
 		    	//處理method的回傳值
-		    	if(o.getReturnType().getType() instanceof VoidType)
+		    	if(o.getReturnType()==null)
 		    		method.setReturnType("OclVoid");
 		    	else
-		    		method.setReturnType(varStr); // 2020待改   array/arraylist -> int[x] int[x][x]
+		    		method.setReturnType(o.getReturnType().getType());
 		    	
 		    	//處理參數
 		    	for(int index = 0 ;o.getParameter()!= null && index < o.getParameter().size();index++) {
 			    	VariableInfo p = o.getParameter().get(index);
-			    	// ArrayList
-			    	if(p.getType() instanceof ArrayListType) {
-			    		//二維
-			    		if( ((ArrayListType)p.getType()).getElement() instanceof ArrayListType) {
-			    			Main.isArraylist=true;
-			    			Main.twoD=true;
-			    		}
-			    	}
-			    	// Array
-			    	else if (p.getType() instanceof ArrayType) {
-			    		Main.doArray=true;
-			    		//二維
-			    		if( ((ArrayType)p.getType()).getElement() instanceof ArrayType)
-			    			Main.twoD=true;   		
-			    	}
-			    	
-			    	/*
 			    	if(p.getType().equals("ArrayList"))
 			    		p.setType("int[x]");
 			    	else if(p.getType().equals("ArrayList<ArrayList>"))
@@ -235,7 +177,7 @@ public class OCL2AST {
 			    		p.setType("int["+p.getLowerValue()+"..."+p.getUpperValue()+"]");
 			    	//	 Main.doArray=true;
 			    	}
-			    	}*/
+			    	}
 			    	method.addArgument(new VariableToken(p.getName(),p.getType()));
 			    	this.symbolTable.addArgumentMap(new VariableToken(p.getName(),p.getType()));
 		    	}

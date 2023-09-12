@@ -74,29 +74,10 @@ public class BlackBoxHandler extends AbstractHandler {
 	public static BlackBoxLauncher blackBoxTest;
 	private File ocl,classUml;
 	
-/*	public BlackBoxHandler(String Projectname) {
-		CurrentEditorName = Projectname;
-		coverageCriteria = "DC";
-		ClassName_TestModel_Coverage = "Grade_BlackBox_DC";
-		CurrentProjName = "";
-		DataWriter.output_folder_path = "D:\\VersionSave\\Grade\\version 1\\";
-		DataWriter.Clg_output_path = "D:\\VersionSave\\Grade\\version 1\\test model\\";
-		DataWriter.testPath_output_path = "D:\\VersionSave\\Grade\\version 1\\test paths\\";
-		DataWriter.testCons_output_path = "D:\\VersionSave\\Grade\\version 1\\test constrains\\";
-		DataWriter.testData_output_path = "D:\\VersionSave\\Grade\\version 1\\test data\\";
-		DataWriter.initOutputPath();
-		Path CDumlPath = Paths.get("D:\\runtime-New_configuration\\Grade\\spec\\"+Projectname+".uml");
-		classUml = CDumlPath.toFile();
-		
-		Path OclPath = Paths.get("D:\\runtime-New_configuration\\Grade\\spec\\"+Projectname+".ocl");
-		ocl = OclPath.toFile();	
-		Main.criterion=Criterion.dc;
-		tcgenplugin_2.handlers.BlackBoxHandler.blackBoxTest = new BlackBoxLauncher(ocl, classUml);
-		tcgenplugin_2.handlers.BlackBoxHandler.blackBoxTest.genBlackBoxTestScripts_version();
-	}*/
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
+			
 		CurrentEditorName = getCurrentFileRealPath().getName();
 		CurrentEditorName = getFileNameNoEx(CurrentEditorName);
 		coverageCriteria = "";

@@ -40,16 +40,9 @@ public class SD2CLP {
 			for(int i=0; i < st.getSDAttribute().size();i++) {
 				attributes.add(st.getSDAttribute().get(i).substring(0, 1).toUpperCase() + st.getSDAttribute().get(i).substring(1,st.getSDAttribute().get(i).length()));
 			}
-			FileWriter dataFile = null;
-			try { //Version Control¸ô®|·|¿ù
-				File dir = new File("examples/"+st.getSDName()+"CLP"); 
-				dir.mkdir();
-				dataFile = new FileWriter("examples/"+st.getSDName()+"CLP/"+st.getSDName()+"Preamble.ecl");
-			} catch(Exception ex) {
-				File dir = new File("D:/eclipse-jee-2018-09-win32-x86_64/eclipse/examples/"+st.getSDName()+"CLP"); 
-				dir.mkdir();
-				dataFile = new FileWriter("D:/eclipse-jee-2018-09-win32-x86_64/eclipse/examples/"+st.getSDName()+"CLP/"+st.getSDName()+"Preamble.ecl");			
-			}
+			File dir = new File("examples/"+st.getSDName()+"CLP"); 
+			dir.mkdir();
+			FileWriter dataFile = new FileWriter("examples/"+st.getSDName()+"CLP/"+st.getSDName()+"Preamble.ecl");
 			BufferedWriter input = new BufferedWriter(dataFile);
 			//get state information
 			

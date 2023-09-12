@@ -16,16 +16,11 @@ import org.stringtemplate.v4.*;
 import org.xml.sax.SAXException;
 
 import com.parctechnologies.eclipse.EclipseException;
-import ccu.pllab.tcgen.PapyrusCDParser.ClassInfo;
-import ccu.pllab.tcgen.PapyrusCDParser.OperationInfo;
-import ccu.pllab.tcgen.PapyrusCDParser.VariableInfo;
 
-import ccu.pllab.tcgen.AbstractType.UserDefinedType;
 import ccu.pllab.tcgen.DataWriter.DataWriter;
 import ccu.pllab.tcgen.ecl2data.Ecl2Data;
 import ccu.pllab.tcgen.ecl2data.Ecl2DataFactory;
 import ccu.pllab.tcgen.exe.main.Main;
-import ccu.pllab.tcgen.launcher.BlackBoxLauncher;
 import ccu.pllab.tcgen.pathCLP2data.CLP2Data;
 import ccu.pllab.tcgen.pathCLP2data.CLP2DataFactory;
 import ccu.pllab.tcgen.sd2clg.SDXML2SD;
@@ -223,7 +218,7 @@ public class TestScriptGenerator {
 		for (TestData testData : this.testDatas) {
 //			String testCaseName = String.format("Test%s%s", testData.getTestDataName(), scriptNo);
 //			System.out.println(testCaseName);
-			//System.out.println(testData.getClassName()+"ODOD");
+
 			URL stgFileURL;
 			InputStreamReader fr = null;
 			if (!testData.isInvalidated()) {
@@ -258,10 +253,8 @@ public class TestScriptGenerator {
 			String sys_decl = testData.getClassName() + " obj" + testData.getClassName() + " = null;\n";
 			if (testData.getObjPre().substring(1, testData.getObjPre().length() - 1).contains("["))
 				sys_decl += testData.getClassName() + " obj" + testData.getClassName() + "Post = null;\n";
-			
-			//20200828
-			else;
-				//sys_decl += testData.getClassName() + " obj" + testData.getClassName() + "_Post = null;\n";
+			else
+				sys_decl += testData.getClassName() + " obj" + testData.getClassName() + "_Post = null;\n";
 
 			template.add("sys_decl", sys_decl);
 
@@ -405,33 +398,7 @@ String ret_val = testData.getRetVal().substring(1, testData.getRetVal().length()
 							}
 							// template.add("assert","assertEquals(objStack.toString(),\"[]\");\n");
 						}
-					} 
-
-					//20200828  UserDefinedType
-					else if(BlackBoxLauncher.typeTable.containsType(testData.getClassName(),testData.getClassName())) {
-						ClassInfo c = ((UserDefinedType)(BlackBoxLauncher.typeTable.get(testData.getClassName(), testData.getClassName()))).getClassInfo();
-						ArrayList<String> ans_arr =new ArrayList<String>();
-						sys_init +=  "obj"+ testData.getClassName() + " = new " + testData.getClassName() + "(";
-						String obj_list_str = "\"" ;
-						for(int i= 0 ; i < c.getProperties().size();i++) {
-							String temp = obj_post.substring(obj_post.indexOf("["),obj_post.indexOf("]")+1);  // [....]
-							if(i!=c.getProperties().size()-1)obj_post = obj_post.substring(obj_post.indexOf("]")+2);
-							if(i==0) {
-								sys_init += temp.substring(1, temp.length()-1);
-								obj_list_str += temp;
-							}
-							else {
-								sys_init += ","+temp.substring(1, temp.length()-1);
-								obj_list_str += ","+temp;
-							}
-							ans_arr.add(temp);
-						}
-						
-						sys_init += ");\n";
-						template.add("obj_list", obj_list_str + "\"");
-					} // else if UserDefinedType
-
-					else {
+					} else {
 						if (obj_post.contains("]"))
 							obj_post = obj_post.substring(0, obj_post.indexOf("]"));
 						String size = testData.getObjPost().substring(testData.getObjPost().indexOf("]") + 1,
@@ -528,21 +495,6 @@ String ret_val = testData.getRetVal().substring(1, testData.getRetVal().length()
 								sys_init += "objQueue.enqueue(" + obj_pre + ");\n";
 							}
 							template.add("obj_list", "\"[" + obj_post.substring(0, obj_post.indexOf("]")) + "]\"");
-						}
-						//20200828
-						else if(testData.getClassName().contains("Clock") ) {
-							String size = testData.getObjPre().substring(testData.getObjPre().indexOf("]") + 1,
-									testData.getObjPre().length() - 1);
-							sys_init = "obj" + testData.getClassName()
-									+ " = new " + testData.getClassName() + "(" +obj_pre + ");\n";
-							if (obj_post.contains("]"))
-								obj_post = obj_post.substring(0, obj_post.indexOf("]"));
-							size = testData.getObjPost().substring(testData.getObjPost().indexOf("]") + 1,
-									testData.getObjPost().length() - 1);
-							template.add("obj_list", "\"[" + obj_post + "]\"");
-							// sys_init += "int[] objArrayPost= {"+obj_post+"};\n"+"obj" +
-							// data.getClassName() + "Post = new " + data.getClassName() +
-							// "(objArrayPost"+size+");\n";
 						}
 
 						else {

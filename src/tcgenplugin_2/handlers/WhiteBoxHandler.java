@@ -4,26 +4,17 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +36,6 @@ import ccu.pllab.tcgen.AbstractConstraint.CLGOperatorNode;
 import ccu.pllab.tcgen.AbstractSyntaxTree.AbstractSyntaxTreeNode;
 import ccu.pllab.tcgen.clg2path.CriterionFactory.Criterion;
 import ccu.pllab.tcgen.exe.main.*;
-import ccu.pllab.tcgen.launcher.BlackBoxLauncher;
 import ccu.pllab.tcgen.srcASTVisitor.SrcVisitProcess;
 import ccu.pllab.tcgen.transform.AST2CLG;
 import ccu.pllab.tcgen.transform.CLG2Path;
@@ -112,11 +102,7 @@ public class WhiteBoxHandler extends AbstractHandler {
 		System.out.println("當前使用editor檔案名稱"+CurrentEditorName);
 		
 		String CurrentEditorPath = getCurrentFileRealPath().getLocation().toOSString();
-		if(CurrentEditorPath.contains("spec"))
-			CurrentEditorProjectPath = CurrentEditorPath.substring(0, CurrentEditorPath.lastIndexOf("\\spec\\"+CurrentEditorName));
-		else
-			CurrentEditorProjectPath = CurrentEditorPath.substring(0, CurrentEditorPath.lastIndexOf("\\src\\"+CurrentEditorName+"\\"+CurrentEditorName));
-	
+		CurrentEditorProjectPath = CurrentEditorPath.substring(0, CurrentEditorPath.lastIndexOf("\\spec\\"+CurrentEditorName));
 		System.out.println("當前使用editor project資料夾路徑"+CurrentEditorProjectPath);
 		
 //		預設為DCC覆蓋度，有邊界值分析
@@ -126,47 +112,22 @@ public class WhiteBoxHandler extends AbstractHandler {
 		
 		DataWriter.output_folder_path = WhiteBoxHandler.CurrentEditorProjectPath;
 		
-		Path CDoclPath = Paths.get(DataWriter.output_folder_path+"/spec/"+WhiteBoxHandler.CurrentEditorName+".ocl");
-		ocl = CDoclPath.toFile();
-		
 		Path CDumlPath = Paths.get(DataWriter.output_folder_path+"/spec/"+WhiteBoxHandler.CurrentEditorName+".uml");
 		classUml = CDumlPath.toFile();
 		
-		Path JavaPath = Paths.get(DataWriter.output_folder_path+"/src/"+WhiteBoxHandler.CurrentEditorName+"/"+WhiteBoxHandler.CurrentEditorName+".java");
+		Path JavaPath = Paths.get(DataWriter.output_folder_path+"/src/"+WhiteBoxHandler.CurrentEditorName+".java");
 		java = JavaPath.toFile();	
-		long startTime = System.currentTimeMillis();
 		
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
-		try {
-			try {
-				window.run(true, true, new IRunnableWithProgress(){
-					public void run(IProgressMonitor monitor)
-						throws InvocationTargetException , InterruptedException {
-						monitor.beginTask("Please wait for test case generation ...", 100);
-						tcgenplugin_2.handlers.BlackBoxHandler.blackBoxTest = new BlackBoxLauncher(ocl, classUml, monitor);
-						//tcgenplugin_2.handlers.BlackBoxHandler.blackBoxTest.genBlackBoxTestScripts();
-						monitor.done();
-					}
-				});
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}catch(InvocationTargetException e) {
-			e.printStackTrace();
-		}
 //		白箱
-		try {		
-			SrcVisitProcess srcVisitProcess = new SrcVisitProcess(java.toString(),ocl,classUml);
+		try {
+//			SrcVisitProcess srcVisitProcess = new SrcVisitProcess(java.toString(),classUml);
 			
 			JOptionPane.showMessageDialog(null, "執行成功", "結果", JOptionPane.INFORMATION_MESSAGE );
 			Main.invCLP="";
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		System.out.println("Using Time:" + (System.currentTimeMillis() - startTime) + " ms");
 		
-		reset();
 		return null;
 	}
 	
@@ -195,46 +156,5 @@ public class WhiteBoxHandler extends AbstractHandler {
             }   
         }   
         return filename;   
-    }
-	
-	public void reset() {
-		Main.invCLP = "";
-		Main.ifCLP = "";
-		Main.isArraylist=false;  
-		Main.isConstructor=false;
-		Main.symbolTable = null;
-		Main.doArray = false;
-		Main.issort=false;
-		Main.twoD=false;
-		//嘗試去除重複執行出錯的bug
-		Main.output_folder_path="";
-		Main.boundary_analysis=false;
-		Main.criterion=null;
-		Main.ast=null;
-		Main.clg=null;
-		Main.attribute=null;
-		Main.className="";
-		Main.msort=false;
-		Main.issort=false;
-		Main.arrayMap=new HashMap<String, Integer>();
-		Main.indexMap=new HashMap<String, Integer>();
-		Main.bodyExpBoundary= false;
-		Main.iterateBoundary=null;
-		Main.conNodeiterateBoundary=null;
-		Main.TestType="";
-		Main.changeBoundary=false;
-		Main.doArray=false;
-		Main.boundaryhavesolution=false;
-		//CLP2Data.Destroy();
-		//CLP2DataFactory.instance= null;
-		//refresh project
-		for(IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
-		    try {
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+    } 
 }

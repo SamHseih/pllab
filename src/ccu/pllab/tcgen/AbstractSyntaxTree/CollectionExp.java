@@ -174,8 +174,4 @@ public class CollectionExp extends AbstractSyntaxTreeNode{
 	{
 		return null;
 	}
-	@Override
-	public String getExpreesion() {
-		return "CollectionExp";
-	}
 }

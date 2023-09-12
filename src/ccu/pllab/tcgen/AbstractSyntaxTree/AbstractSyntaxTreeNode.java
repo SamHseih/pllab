@@ -30,7 +30,7 @@ public abstract class AbstractSyntaxTreeNode {
 		return this.id;
 	}
 	
-	public abstract String getExpreesion();
+
 	public abstract String childNodeInfo();
 	public abstract String ASTInformation();
 	public abstract CLGConstraint AST2CLG();

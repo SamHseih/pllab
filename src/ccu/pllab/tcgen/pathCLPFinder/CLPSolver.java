@@ -74,46 +74,12 @@ public class CLPSolver {
 		}
 		
 		this.EclDirectPath = DataWriter.testCons_output_path;
-		String Time_EclDirectPath = DataWriter.testCons_output_path.replace(className+"_BlackBox", "Time_BlackBox");
-		String Date_EclDirectPath = DataWriter.testCons_output_path.replace(className+"_BlackBox", "Date_BlackBox");
-		System.out.println(this.EclDirectPath);
-		System.out.println(Time_EclDirectPath );
-		System.out.println(Date_EclDirectPath );
 		File eclFile = new File(EclDirectPath + className + methodName + TestTypeSign + pathNum + ".ecl");
 		int testCaseID = 1;
 		try {
 //			
 			this.connectCLPSolver();
-			
-			File tempF1= new File(Date_EclDirectPath+"DateDate.ecl");
-			File tempF2= new File(Date_EclDirectPath+"DateGetYear.ecl");
-			File tempF3= new File(Date_EclDirectPath+"DateGetMonth.ecl");
-			File tempF4= new File(Date_EclDirectPath+"DateGetDay.ecl");
-			File tempF5= new File(Date_EclDirectPath+"DateNext.ecl");
-			
-			if( tempF1.exists() ) this.clp2data.compile(tempF1);
-			if( tempF2.exists() ) this.clp2data.compile(tempF2);
-			if( tempF3.exists() ) this.clp2data.compile(tempF3);
-			if( tempF4.exists() ) this.clp2data.compile(tempF4);
-			if( tempF5.exists() ) this.clp2data.compile(tempF5);
-
-			
-			File tempF6= new File(Time_EclDirectPath+"TimeTime.ecl");
-			File tempF7= new File(Time_EclDirectPath+"TimeGetHour.ecl");
-			File tempF8= new File(Time_EclDirectPath+"TimeGetMinute.ecl");
-			File tempF9= new File(Time_EclDirectPath+"TimeGetSecond.ecl");
-			File tempF10= new File(Time_EclDirectPath+"TimeNext.ecl");
-			
-			if( tempF6.exists() ) this.clp2data.compile(tempF6);
-			if( tempF7.exists() ) this.clp2data.compile(tempF7);
-			if( tempF8.exists() ) this.clp2data.compile(tempF8);
-			if( tempF9.exists() ) this.clp2data.compile(tempF9);
-			if( tempF10.exists() ) this.clp2data.compile(tempF10);
-			//File tempF11= new File("C:\\runtime-EclipseApplication\\Clock\\test constraints\\Clock_BlackBox_DCC\\ClockClock.ecl");
-			//this.clp2data.compile(tempF11);
-			
 			this.clp2data.compile(eclFile);
-			
 			this.sol = this.clp2data.solvingCSP_term("test" + className + methodName, objPre, argPre, objPost, argPost, retVal, 5);
 			this.testData = new TestData(className, methodName, pathNum, testCaseID, isConstructor, retType, this.sol);
 			System.out.println("TD: " + testData.toString());
@@ -125,19 +91,6 @@ public class CLPSolver {
 		}
 	}
   
-	public boolean compiling(String folderName, String fileName) {
-		//compile method, needn't get testData
-		this.EclDirectPath = DataWriter.output_folder_path + "\\" + folderName + "\\";
-		File eclFile = new File(EclDirectPath + fileName + ".ecl");
-		try {
-			this.connectCLPSolver();
-			this.clp2data.compile(eclFile);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	
 	public boolean solving(String className, String methodName, int pathNum, int testcaseID, boolean isConstructor, String retType, String objPre, String argPre, String objPost, String argPost,
 			String retVal,String output_path) {
 		
@@ -160,8 +113,7 @@ public class CLPSolver {
 		try {
 //			
 			this.connectCLPSolver();
-
-			
+			this.clp2data.compile(eclFile);
 			this.sol = this.clp2data.solvingCSP_term("test" + className + methodName, objPre, argPre, objPost, argPost, retVal, 4);
 			this.testData = new TestData(className, methodName, pathNum, testCaseID, isConstructor, retType, this.sol);
 			System.out.println("TD: " + testData.toString());
@@ -214,16 +166,6 @@ public class CLPSolver {
 	public TestData getTestData(){
 		return this.testData;
 	}
-	
-	public String getCLPTestDataString(){
-		return "OBJ_PRE = "+this.testData.getObjPre()+
-				", ARG_PRE = "+this.testData.getArgPre()+
-				",OBJ_POST = "+this.testData.getObjPost()+
-				",ARG_POST = "+this.testData.getArgPost()+
-				", RETVAL = "+this.testData.getRetVal()+
-				", EXCEPTION ="+this.testData.getException();
-	}
-	
 	public TestDataClassLevel getTestDataclass(){
 		return this.testDataclass;
 	}

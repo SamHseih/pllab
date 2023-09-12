@@ -7,9 +7,6 @@ import java.util.HashMap;
 import ccu.pllab.tcgen.ASTGraph.ASTGraphNode;
 import ccu.pllab.tcgen.AbstractCLG.CLGGraph;
 import ccu.pllab.tcgen.AbstractConstraint.*;
-import version_AST.ReduceASTnode;
-import version_AST.ReduceIfExp;
-import version_AST.ReduceOperatorExp;
 public class StereoType extends AbstractSyntaxTreeNode{
 	String stereoType;
 	String exception;
@@ -127,21 +124,5 @@ public class StereoType extends AbstractSyntaxTreeNode{
 	public AbstractSyntaxTreeNode ASTclone()
 	{
 		return null;
-	}
-	@Override
-	public String getExpreesion() {
-		return "StereoType";
-	}
-	
-	public void setExpression(ReduceASTnode reduceASTnode) {
-		if(reduceASTnode.getExpreesion().equals("operatorExp")) {
-			this.expression = new OperatorExp((ReduceOperatorExp)reduceASTnode);
-		}
-		else if(reduceASTnode.getExpreesion().equals("ifExp")) {
-			this.expression = new IfExp((ReduceIfExp)reduceASTnode);
-		}
-		else {
-			System.out.println("no this type from stereo struture");
-		}
 	}
 }

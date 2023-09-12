@@ -864,12 +864,7 @@ public class CLGOperatorNode extends CLGConstraint {
 	@Override
 	public String getLocalVariable() {
 		// TODO Auto-generated method stub
-		if( this.leftOperand!=null ) {       //System.out.println(this.leftOperand.getCLPInfo()+" AAA " );
-			if( this.rightOperand!=null )    //System.out.println(this.rightOperand.getCLPInfo() +"  DC_P" );
-				return this.leftOperand.getLocalVariable() + "," +this.rightOperand.getLocalVariable();
-			else return this.leftOperand.getLocalVariable();		
-		}
-		return null;
+		return this.leftOperand.getLocalVariable() + "," +this.rightOperand.getLocalVariable();
 	}
 	@Override
 	public void negConstraint() {

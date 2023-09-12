@@ -103,9 +103,4 @@ public class ClassifierContext extends AbstractSyntaxTreeNode{
 	{
 		return null;
 	}
-
-	@Override
-	public String getExpreesion() {
-		return "ClassifierContext";
-	}
 }

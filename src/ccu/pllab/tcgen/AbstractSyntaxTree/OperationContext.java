@@ -39,10 +39,6 @@ public class OperationContext extends AbstractSyntaxTreeNode{
 		return this.methodName;
 	}
 	
-	public void setParameters2(PropertyCallExp parameters) {
-		this.parameters.add(parameters);
-	}
-	
 	public void setParameters(ArrayList<PropertyCallExp>parameters)
 	{
 		this.parameters=parameters;
@@ -231,10 +227,5 @@ public class OperationContext extends AbstractSyntaxTreeNode{
 	public AbstractSyntaxTreeNode ASTclone()
 	{
 		return null;
-	}
-
-	@Override
-	public String getExpreesion() {	
-		return "OperationContext";
 	}
 }

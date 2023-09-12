@@ -12,10 +12,6 @@ import ccu.pllab.tcgen.ASTGraph.ASTGraphOr;
 import ccu.pllab.tcgen.AbstractCLG.CLGGraph;
 import ccu.pllab.tcgen.AbstractConstraint.*;
 import scala.cloneable;
-import version_AST.ReduceIfExp;
-import version_AST.ReduceLiteralExp;
-import version_AST.ReduceOperatorExp;
-import version_AST.ReducePropertyCallExp;
 
 public class IfExp  extends AbstractSyntaxTreeNode{
 	String ifExp;
@@ -39,12 +35,6 @@ public class IfExp  extends AbstractSyntaxTreeNode{
 		this.conditionExp=condition;
 		this.thenExp=then;
 		this.elseExp=elseExp;
-	}
-	
-	public IfExp(ReduceIfExp operatorNode) {
-		super();
-		this.ifExp="If";
-		setExpression(operatorNode);
 	}
 	
 	public void setIfExp(String ifExp) {
@@ -297,60 +287,5 @@ public class IfExp  extends AbstractSyntaxTreeNode{
 		else
 			ifExp=new IfExp(this.ifExp, this.conditionExp, this.thenExp,this.elseExp);
 		return null;
-	}
-	@Override
-	public String getExpreesion() {
-		return "IfExp";
-	}
-	
-	public void setExpression(ReduceIfExp operatorNode) {
-		//if
-		if(operatorNode.getIfExp().getExpreesion().equals("operatorExp")) {
-			this.conditionExp = new OperatorExp((ReduceOperatorExp)operatorNode.getIfExp());
-		}
-		else if(operatorNode.getIfExp().getExpreesion().equals("ifExp")) {
-			this.conditionExp = new IfExp((ReduceIfExp)operatorNode.getIfExp());
-		}
-		else if(operatorNode.getIfExp().getExpreesion().equals("literalExp")) {
-			this.conditionExp = new LiteralExp((ReduceLiteralExp)operatorNode.getIfExp());
-		}
-		else if(operatorNode.getIfExp().getExpreesion().equals("propertyExp")){
-			this.conditionExp = new PropertyCallExp((ReducePropertyCallExp)operatorNode.getIfExp());
-		}
-		else {
-			System.out.println("no this type from operator struture");
-		}
-		//then
-		if(operatorNode.getThenExp().getExpreesion().equals("operatorExp")) {
-			this.thenExp = new OperatorExp((ReduceOperatorExp)operatorNode.getThenExp());
-		}
-		else if(operatorNode.getThenExp().getExpreesion().equals("ifExp")) {
-			this.thenExp = new IfExp((ReduceIfExp)operatorNode.getThenExp());
-		}
-		else if(operatorNode.getThenExp().getExpreesion().equals("literalExp")) {
-			this.thenExp = new LiteralExp((ReduceLiteralExp)operatorNode.getThenExp());
-		}
-		else if(operatorNode.getThenExp().getExpreesion().equals("propertyExp")){
-			this.thenExp = new PropertyCallExp((ReducePropertyCallExp)operatorNode.getThenExp());
-		}
-		else {
-			System.out.println("no this type from operator struture");
-		}
-		//else
-		if(operatorNode.getElseExp().getExpreesion().equals("operatorExp")) {
-			this.elseExp = new OperatorExp((ReduceOperatorExp)operatorNode.getElseExp());
-		}
-		else if(operatorNode.getElseExp().getExpreesion().equals("ifExp")) {
-			this.elseExp = new IfExp((ReduceIfExp)operatorNode.getElseExp());
-		}
-		else if(operatorNode.getElseExp().getExpreesion().equals("literalExp")) {
-			this.elseExp = new LiteralExp((ReduceLiteralExp)operatorNode.getElseExp());
-		}
-		else if(operatorNode.getElseExp().getExpreesion().equals("propertyExp")){
-			this.elseExp = new PropertyCallExp((ReducePropertyCallExp)operatorNode.getElseExp());
-		}
-		else {
-			System.out.println("no this type from operator struture");
-		}
 	}
 }

@@ -3,8 +3,6 @@ package ccu.pllab.tcgen.AbstractSyntaxTree;
 
 import java.util.ArrayList;
 
-import ccu.pllab.tcgen.AbstractType.VariableType;
-
 public class MethodToken {
 	String methodName;
 	ArrayList<VariableToken> argument=new ArrayList<VariableToken>();

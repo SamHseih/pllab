@@ -1,11 +1,7 @@
 package ccu.pllab.tcgen.launcher;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -32,24 +28,15 @@ import org.xml.sax.SAXException;
 import com.parctechnologies.eclipse.EclipseException;
 
 import ccu.pllab.tcgen.AbstractCLG.CLGGraph;
-import ccu.pllab.tcgen.AbstractCLG.CLGStartNode;
 import ccu.pllab.tcgen.AbstractSyntaxTree.AbstractSyntaxTreeNode;
 import ccu.pllab.tcgen.AbstractSyntaxTree.SymbolTable;
-import ccu.pllab.tcgen.AbstractType.TypeTable;
-import ccu.pllab.tcgen.AbstractType.UserDefinedType;
 import ccu.pllab.tcgen.DataWriter.DataWriter;
-import ccu.pllab.tcgen.TestCase.TestData;
-import ccu.pllab.tcgen.clg2path.CriterionFactory.Criterion;
-import ccu.pllab.tcgen.clgGraph2Path.CoverageCriterionManager;
-import ccu.pllab.tcgen.exe.main.Main;
 import ccu.pllab.tcgen.transform.AST2CLG;
 import ccu.pllab.tcgen.transform.CLG2Path;
 import ccu.pllab.tcgen.transform.OCL2AST;
-import ccu.pllab.tcgen.transform.Splitter;
 import tudresden.ocl20.pivot.model.ModelAccessException;
 import tudresden.ocl20.pivot.parser.ParseException;
 import tudresden.ocl20.pivot.tools.template.exception.TemplateException;
-import version_control.FileHandleToServer;
 import tcgenplugin_2.handlers.BlackBoxHandler;;
 
 public class BlackBoxLauncher {
@@ -63,20 +50,11 @@ public class BlackBoxLauncher {
 	private ArrayList<CLGGraph> clgGraph;
 	private CLGGraph invCLG;
 	private IProgressMonitor pmonitor;
-	public static TypeTable typeTable;
-	public static boolean generate_testinfo = true; //for版本控制 只要產生test data 其他clg、path等都不用產生
-	public static String version_saveFilePath = "";
+	
 	public BlackBoxLauncher(File ocl, File classUml, IProgressMonitor monitor) {
 		this.ocl = ocl;
 		this.classUml = classUml;
 		this.pmonitor = monitor;
-		this.typeTable = new TypeTable();
-	}
-	
-	public BlackBoxLauncher(File ocl, File classUml) {
-		this.ocl = ocl;
-		this.classUml = classUml;
-		this.typeTable = new TypeTable();
 	}
 	
 	public AbstractSyntaxTreeNode getAST() {
@@ -111,8 +89,6 @@ public class BlackBoxLauncher {
 			this.clgGraph = clgParser.getCLGGraph();
 			this.invCLG = clgParser.getInvCLG();
 			pmonitor.worked(10);
-
-			
 //			CLG -> JUnit
 //			this.pathParser = new CLG2Path();
 //			this.symbolTable = oclParser.getSymbolTable();
@@ -164,84 +140,10 @@ public class BlackBoxLauncher {
 			oclParser = null;
 			clgParser = null;
 			pathParser = null;
-			typeTable = null;
 			
-	//s		JOptionPane.showMessageDialog(null, "Execution Succeed", "Result", JOptionPane.INFORMATION_MESSAGE );
+//			JOptionPane.showMessageDialog(null, "Execution Succeed", "Result", JOptionPane.INFORMATION_MESSAGE );
 		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(null, "Execution Failed", "Result", JOptionPane.INFORMATION_MESSAGE );
-			System.out.println("Execution Failed");
-			e1.printStackTrace();
-		}	
-	}
-	
-	public void genBlackBoxTestScripts_VersionControl(String ProjectName, String versionsaveFilePath,String version, String compareVer, String coverageCriteria) {
-		try {
-			if(coverageCriteria.equals("DC")) {
-				Main.criterion=Criterion.dc;
-				BlackBoxHandler.coverageCriteria = "DC";
-			}
-			else if(coverageCriteria.equals("DCC")) {
-				Main.criterion=Criterion.dcc;
-				BlackBoxHandler.coverageCriteria = "DCC";
-			}
-			else { //以後新增用
-				Main.criterion=Criterion.dc;
-				BlackBoxHandler.coverageCriteria = "DC";
-			}
-			BlackBoxHandler.CurrentEditorName = ProjectName;
-			Main.TestType = "BlackBox";
-			generate_testinfo = false;
-			this.version_saveFilePath = versionsaveFilePath;
-			DataWriter.output_folder_path = "D:///version_control_data//"+ProjectName+"//"; //隨便設的 不會用到 但需要設定
-			DataWriter.Clg_output_path = DataWriter.output_folder_path+"test model//";//
-			DataWriter.testPath_output_path = DataWriter.output_folder_path+"test paths//";//
-			DataWriter.testCons_output_path = DataWriter.output_folder_path+"test//";//
-			DataWriter.testData_output_path = DataWriter.output_folder_path+"test data"; //
-			DataWriter.initOutputPath();
-			Main.boundary_analysis=true;
-			Main.msort=false;
-//			OCL -> AST
-			this.oclParser = new OCL2AST();
-			oclParser.makeAST(ocl);
-			oclParser.makeSymbolTable(classUml);
-		    oclParser.typeToAst();
-		    this.oclAst=oclParser.getAbstractSyntaxTree();
-			oclAst.toGraphViz();
-			
-//			AST -> CLG
-			this.clgParser = new AST2CLG();
-			clgParser.genCLG(oclAst);
-			this.clgGraph = clgParser.getCLGGraph();
-			this.invCLG = clgParser.getInvCLG();
-			System.out.println(compareVer);
-			this.pathParser = new CLG2Path();
-			this.symbolTable = oclParser.getSymbolTable();
-			pathParser.setAttribute(invCLG, symbolTable);
-			pathParser.init(clgGraph);
-			
-			
-			long startTime=System.currentTimeMillis();
-			for(int number=0;number<clgGraph.size();number++) {
-				pathParser.genTestData_VersionControl(clgGraph,number,version,compareVer);
-				pathParser.genTestScript(classUml);		
-			} 
-			long endTime=System.currentTimeMillis();
-			System.out.println("程式執行時間new： "+ (endTime-startTime) +"ms");
-			
-			
-			String testScript = pathParser.getTestScript()+"}";
-			InputStream is = new ByteArrayInputStream(testScript.getBytes());
-			FileHandleToServer.storeFile(pathParser.getClassName()+"\\"+ version +"\\",
-					                     pathParser.getClassName()+"Test.txt"
-											 , is);
-			oclParser = null;
-			clgParser = null;
-			pathParser = null;
-			typeTable = null;
-	//		
-	//		JOptionPane.showMessageDialog(null, "Execution Succeed", "Result", JOptionPane.INFORMATION_MESSAGE );
-		} catch (Exception e1) {
-	//		JOptionPane.showMessageDialog(null, "Execution Failed", "Result", JOptionPane.INFORMATION_MESSAGE );
+//			JOptionPane.showMessageDialog(null, "Execution Failed", "Result", JOptionPane.INFORMATION_MESSAGE );
 			System.out.println("Execution Failed");
 			e1.printStackTrace();
 		}	

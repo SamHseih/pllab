@@ -1,12 +1,9 @@
 package ccu.pllab.tcgen.transform;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,8 +32,6 @@ import tcgenplugin_2.handlers.BlackBoxHandler;
 import tudresden.ocl20.pivot.model.ModelAccessException;
 import tudresden.ocl20.pivot.parser.ParseException;
 import tudresden.ocl20.pivot.tools.template.exception.TemplateException;
-import version_control.FileHandleToServer;
-import version_control.TestData_Path_Dependency;
 
 public class CLG2Path {
 	private LinkedList<CLGNode> path;
@@ -46,6 +41,7 @@ public class CLG2Path {
 	private String className;
 	private List<TestData> testData;
 	private String testScript;
+	
 	public CLG2Path() throws IOException, ParserConfigurationException, SAXException, TemplateException, ModelAccessException, ParseException, EclipseException, TransformerException{
 		
 	}
@@ -81,7 +77,7 @@ public class CLG2Path {
 			tcFactory.createTestCase(((CLGStartNode) subclg.getStartNode()).getGraphName());
 		}
 		testScript += "}";
-		DataWriter.writeInfo(testScript, className + "Test", "java", DataWriter.output_folder_path+"\\test script\\", className+"_"+Main.TestType+"_"+Main.criterion+"\\");
+		DataWriter.writeInfo(testScript, className + "Test", "java", DataWriter.output_folder_path, "test");
 	}
 	
 	
@@ -148,18 +144,18 @@ public class CLG2Path {
 		this.className = ((CLGStartNode) clg.get(0).getStartNode()).getClassName();
 		
 		String packagePath = "";
-			switch (BlackBoxHandler.coverageCriteria) {
-			case "DC":					 	
-				packagePath = "package team.ccu.pllab.dc;";
-				break;
-			case "DCC":					 	
-				packagePath = "package team.ccu.pllab.dcc;";
-				break;
-			case "MCC":					 	
-				packagePath = "package team.ccu.pllab.mcc;";
-				break;
-			default :
-				packagePath = "package team.ccu.pllab.dcc;";
+		switch (BlackBoxHandler.coverageCriteria) {
+		case "DC":					 	
+			packagePath = "package team.ccu.pllab.dc;";
+			break;
+		case "DCC":					 	
+			packagePath = "package team.ccu.pllab.dcc;";
+			break;
+		case "MCC":					 	
+			packagePath = "package team.ccu.pllab.mcc;";
+			break;
+		default :
+			packagePath = "package team.ccu.pllab.dcc;";
 						
 	}
 		this.testScript = packagePath + "\n" + 
@@ -170,30 +166,12 @@ public class CLG2Path {
 				"public class "+this.className+"Test extends TestCase {\n";
 	}
 	
-	
 	public List<TestData> genTestData(ArrayList<CLGGraph> clg, int number) throws IOException, CloneNotSupportedException{
-		CoverageCriterionManager manager=new CoverageCriterionManager();
+		CoverageCriterionManager manager=new CoverageCriterionManager();	
 		CLGGraph subclg=clg.get(number);
 		((CLGStartNode)subclg.getStartNode()).setClassAttributes(this.attribute);
 		manager.init(subclg);
-	
 		this.testData = manager.genTestSuite();
-		
-		return this.testData;
-	}
-	
-	public List<TestData> genTestData_VersionControl(ArrayList<CLGGraph> clg, int number, String version, String compareVer) throws IOException, CloneNotSupportedException{	
-		CoverageCriterionManager manager=new CoverageCriterionManager();
-		CLGGraph subclg=clg.get(number);
-		((CLGStartNode)subclg.getStartNode()).setClassAttributes(this.attribute);
-		manager.init(subclg);
-		
-		this.testData = manager.genTestSuite_VersionControl(version, compareVer);
-
-		InputStream is = new ByteArrayInputStream(manager.getTD_path_dependency().getBytes());
-		FileHandleToServer.storeFile(this.className+"\\"+ version +"\\dependency\\",
-										 this.className+((CLGStartNode)subclg.getStartNode()).getMethodName()+"_dependency.txt"
-										 , is);
 		
 		return this.testData;
 	}
@@ -204,7 +182,7 @@ public class CLG2Path {
 //		String ts = testScriptGenerator.genTestScriptByPreamble(uml);
 //		this.testScript += ts;
 		
-		if(this.className.contains("Array") || this.className.contains("Date") || this.className.contains("Time") || this.className.contains("Clock")) {
+		if(this.className.contains("Array") || this.className.contains("Date") || this.className.contains("Time")) {
 			TestScriptGenerator testScriptGenerator = new TestScriptGenerator();
 			testScriptGenerator.init(this.testData);
 			String ts = testScriptGenerator.genTestCase();
@@ -229,7 +207,6 @@ public class CLG2Path {
 		return this.testScript;
 	}
 	
-
 	public void genTestScripts(ArrayList<CLGGraph> clg, File uml) throws IOException, ParserConfigurationException, SAXException, TemplateException, ModelAccessException, ParseException, EclipseException, TransformerException, CloneNotSupportedException {
 		Main.attribute=this.attribute; //有使用到
 		if(this.invCLP!=null)
@@ -256,5 +233,4 @@ public class CLG2Path {
 		testScript += "}";
 		DataWriter.writeInfo(testScript, className + "Test", "java", DataWriter.output_folder_path, "test");
 	}
-	
 }
